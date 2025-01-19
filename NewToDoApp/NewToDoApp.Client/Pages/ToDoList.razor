@@ -4,15 +4,14 @@
 
 <h3>ToDoList</h3>
 <div>
-    @foreach(var ToDo in ToDoService.ToDos){
+    @foreach (var ToDo in ToDoService.Todos)
+    {
 
     }
 </div>
 
 @code {
-    public List<TodoItem> ToDos = new List<ToDoItem>();
+    public List<TodoItem> ToDoLi = new List<TodoItem>();
 
-    public Task OnInitializedAsync{
-
-    }
+    
 }
