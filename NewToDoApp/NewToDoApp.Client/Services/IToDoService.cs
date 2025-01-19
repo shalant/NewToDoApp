@@ -2,8 +2,9 @@
 
 namespace NewToDoApp.Client.Services
 {
-    public class IToDoService
+    public interface IToDoService
     {
         List<TodoItem> ToDos {  get; set; }
+        Task GetAllToDos();
     }
 }

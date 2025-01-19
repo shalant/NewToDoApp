@@ -4,14 +4,24 @@
 
 <h3>ToDoList</h3>
 <div>
-    @foreach (var ToDo in ToDoService.Todos)
-    {
-
+    @if(ToDoService.ToDos == null || ToDoService.ToDos.Count == 0){
+        <p>not wired up brah</p>
     }
+    else 
+    {
+        @foreach (var ToDo in ToDoService.ToDos)
+        {
+            <p>@ToDo.Name</p>
+        }
+    }
+    
 </div>
 
 @code {
     public List<TodoItem> ToDoLi = new List<TodoItem>();
 
-    
+    protected override async Task OnInitializedAsync()
+    {
+        await ToDoService.GetAllToDos();
+    }
 }

@@ -1,5 +1,4 @@
-﻿using NewToDoApp.Client.Pages;
-using NewToDoApp.Models;
+﻿using NewToDoApp.Models;
 using System.Net.Http.Json;
 
 namespace NewToDoApp.Client.Services
