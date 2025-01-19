@@ -14,4 +14,8 @@
     <PackageReference Include="MudBlazor" Version="7.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Todo.Models\NewToDoApp.Models.csproj" />
+  </ItemGroup>
+
 </Project>

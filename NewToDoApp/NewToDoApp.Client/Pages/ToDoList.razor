@@ -1,0 +1,18 @@
+﻿@page "/ToDoList"
+@using NewToDoApp.Models
+@inject IToDoService ToDoService
+
+<h3>ToDoList</h3>
+<div>
+    @foreach(var ToDo in ToDoService.ToDos){
+
+    }
+</div>
+
+@code {
+    public List<TodoItem> ToDos = new List<ToDoItem>();
+
+    public Task OnInitializedAsync{
+
+    }
+}
