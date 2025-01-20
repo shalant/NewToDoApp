@@ -1,5 +1,6 @@
 ﻿@page "/todolist"
 @using NewToDoApp.Models
+@inject NavigationManager NavigationManager
 @inject IToDoService ToDoService
 @rendermode @(new InteractiveAutoRenderMode(prerender: false))
 
@@ -9,7 +10,7 @@
 
 @if(ToDoService.ToDos == null || ToDoService.ToDos.Count == 0)
 {
-    <p>no stuff brah</p>
+    <p>Loading...</p>
 }
 else
 {
@@ -24,13 +25,19 @@ else
                 <p>@ToDo.Name</p>
             } *@
             <MudButton Href="todolist/create">Create New</MudButton>
-            <MudDataGrid Items="ToDoService.ToDos">
+            <MudDataGrid T="TodoItem" Items="ToDoService.ToDos" SelectOnRowClick="true" 
+                EditMode="DataGridEditMode.Form" Bordered="true"
+                EditTrigger="DataGridEditTrigger.OnRowClick">
                 <Columns>
+                    <PropertyColumn Property="x => x.Id" Title="Id" />
                     <PropertyColumn Property="x => x.Name" Title="Name" />
                     <TemplateColumn Items="todoitem">
                         <CellTemplate>
                             @* <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" /> *@
-                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Details" />
+                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Details" 
+                                
+                            />
+                            @* @OnClick="GoToDeletePage(id)" *@
                             <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" />
                             <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" />
 
@@ -51,5 +58,14 @@ else
     {
         ToDoService.ToDosChanged += StateHasChanged;
         await ToDoService.GetAllToDos();
+    }
+
+    private async Task DeleteTodoItem(int id)
+    {
+        await ToDoService.DeleteTodo(id);
+    }
+
+    private void GoToDeletePage(int id){
+        NavigationManager.NavigateTo("$todolist/delete/{id}");
     }
 }

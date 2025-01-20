@@ -48,5 +48,10 @@ namespace NewToDoApp.Client.Services
             var result = await _http.PostAsJsonAsync<TodoItem>("api/TodoItem", newToDo);
             return newToDo;
         }
+
+        public async Task DeleteTodo(int id)
+        {
+            await _http.DeleteAsync($"api/TodoItem/{id}");
+        }
     }
 }
