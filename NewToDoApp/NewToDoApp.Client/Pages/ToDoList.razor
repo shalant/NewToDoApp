@@ -3,6 +3,7 @@
 @inject IToDoService ToDoService
 @rendermode @(new InteractiveAutoRenderMode(prerender: false))
 
+<MudPopoverProvider />
 
 <h3>ToDoList</h3>
 
@@ -22,7 +23,7 @@ else
             {
                 <p>@ToDo.Name</p>
             } *@
-            <MudButton Href="create">Create New</MudButton>
+            <MudButton Href="todolist/create">Create New</MudButton>
             <MudDataGrid Items="ToDoService.ToDos">
                 <Columns>
                     <PropertyColumn Property="x => x.Name" Title="Name" />

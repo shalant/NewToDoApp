@@ -1,8 +1,11 @@
-﻿@page "/create"
+﻿@page "/todolist/create"
 @using Microsoft.EntityFrameworkCore
 @* @using NewToDoApp.Client.Services *@
 @using NewToDoApp.Models
 @inject IToDoService ToDoService
+@rendermode @(new InteractiveAutoRenderMode(prerender: false))
+
+@* <MudPopoverProvider /> *@
 
 <h3>Create</h3>
 <PageTitle>Create</PageTitle>
@@ -12,40 +15,39 @@
 <h2>ToDoItem</h2>
 <hr />
 
-<div class="row">
-    <div class="col-md-4">
-        <EditForm method="post" Model="TodoItem" OnValidSubmit="AddToDo" FormName="create" Enhance>
-            <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert" />
-            <div class="mb-3">
-                <label for="name" class="form-label">Name:</label>
-                <InputText id="name" @bind-Value="ToDoItem.Name" class="form-control" />
-                <ValidationMessage For="() => ToDoItem.Name" class="text-danger" />
-            </div>
-            <div class="mb-3">
-                <label for="iscomplete" class="form-label">IsComplete:</label>
-                <InputCheckbox id="iscomplete" @bind-Value="ToDoItem.IsComplete" class="form-check-input" />
-                <ValidationMessage For="() => ToDoItem.IsComplete" class="text-danger" />
-            </div>
-            <div class="mb-3">
-                <label for="secret" class="form-label">Secret:</label>
-                <InputText id="secret" @bind-Value="ToDoItem.Secret" class="form-control" />
-                <ValidationMessage For="() => ToDoItem.Secret" class="text-danger" />
-            </div>
-            <button type="submit" class="btn btn-primary">Create</button>
-        </EditForm>
+<EditForm Model="ToDoItem" OnValidSubmit="AddToDoItem">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="text-danger" role="alert" />
+    <div class="mb-3">
+        <label for="name" class="form-label">Name:</label>
+        <InputText id="name" @bind-Value="ToDoItem.Name" class="form-control" />
+        <ValidationMessage For="() => ToDoItem.Name" class="text-danger" />
     </div>
-</div>
+    <div class="mb-3">
+        <label for="iscomplete" class="form-label">IsComplete:</label>
+        <InputCheckbox id="iscomplete" @bind-Value="ToDoItem.IsComplete" class="form-check-input" />
+        <ValidationMessage For="() => ToDoItem.IsComplete" class="text-danger" />
+    </div>
+    <div class="mb-3">
+        <label for="secret" class="form-label">Secret:</label>
+        <InputText id="secret" @bind-Value="ToDoItem.Secret" class="form-control" />
+        <ValidationMessage For="() => ToDoItem.Secret" class="text-danger" />
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</EditForm>
 
 <div>
     <a href="/todoitems">Back to List</a>
 </div>
 
 @code {
+    [SupplyParameterFromForm]
+    private TodoItem ToDoItem { get; set; } = new();
 
-    private async Task AddToDoItem(TodoItem item) 
+    // private async Task AddToDoItem(TodoItem item) 
+    private async Task AddToDoItem() 
     {
-        var newToDoItem = await ToDoService.AddToDo(item);
+        var newToDoItem = await ToDoService.AddToDo(ToDoItem);
         
     }
     // [SupplyParameterFromForm]
