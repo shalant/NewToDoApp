@@ -54,9 +54,9 @@ namespace NewToDoApp.Controllers
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         // <snippet_Update>
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem(long id, ToDoItemDTO todoDTO)
-        {
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutTodoItem(long id, ToDoItemDTO todoDTO)
+        //{
             //if (id != todoDTO.Id)
             //{
             //    return BadRequest();
@@ -80,8 +80,8 @@ namespace NewToDoApp.Controllers
             //    return NotFound();
             //}
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
         // </snippet_Update>
 
         // POST: api/TodoItems
@@ -93,7 +93,8 @@ namespace NewToDoApp.Controllers
             var todoItem = new TodoItem
             {
                 IsComplete = item.IsComplete,
-                Name = item.Name
+                Name = item.Name,
+                Secret = item.Secret
             };
 
             _toDoItemService.AddItemAsync(todoItem);
@@ -107,21 +108,13 @@ namespace NewToDoApp.Controllers
         }
         // </snippet_Create>
 
-        // DELETE: api/TodoItems/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteTodoItem(long id)
-        //{
-        //var todoItem = await _context.TodoItems.FindAsync(id);
-        //if (todoItem == null)
-        //{
-        //    return NotFound();
-        //}
-
-        //_context.TodoItems.Remove(todoItem);
-        //await _context.SaveChangesAsync();
-
-        //return NoContent();
-        //}
+        //DELETE: api/TodoItems/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTodoItem(int id)
+        {
+            var result = await _toDoItemService.DeleteItemAsync(id);
+            return Ok(result);
+        }
 
         //private bool TodoItemExists(long id)
         //{

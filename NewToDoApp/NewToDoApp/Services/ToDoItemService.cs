@@ -29,8 +29,25 @@ namespace NewToDoApp.Services
             await _context.TodoItems.AddAsync(todoItem);
             await _context.SaveChangesAsync();
             return todoItem;
-            
+        }
 
+        public async Task<ServiceResponse<bool>> DeleteItemAsync(int id)
+        {
+            var todoItem = await _context.TodoItems.FindAsync(id);
+            if (todoItem == null) 
+            {
+                return new ServiceResponse<bool>
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "Item does not exist"
+                };
+            }
+
+            _context.TodoItems.Remove(todoItem);
+            await _context.SaveChangesAsync() ;
+
+            return new ServiceResponse<bool> {Data = true};
         }
     }
 }

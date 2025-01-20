@@ -6,5 +6,6 @@ namespace NewToDoApp.Services
     {
         Task<ServiceResponse<List<TodoItem>>> GetItemsAsync();
         Task<TodoItem> AddItemAsync(TodoItem todoItem);
+        Task<ServiceResponse<bool>> DeleteItemAsync(int id);
     }
 }

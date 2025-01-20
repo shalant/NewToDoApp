@@ -12,8 +12,8 @@ using NewToDoApp.Data;
 namespace NewToDoApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250120021517_initial")]
-    partial class initial
+    [Migration("20250120201657_minorRedo")]
+    partial class minorRedo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -225,11 +225,11 @@ namespace NewToDoApp.Migrations
 
             modelBuilder.Entity("NewToDoApp.Models.TodoItem", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("IsComplete")
                         .HasColumnType("bit");

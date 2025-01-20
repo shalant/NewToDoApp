@@ -2,6 +2,7 @@
 @using Microsoft.EntityFrameworkCore
 @* @using NewToDoApp.Client.Services *@
 @using NewToDoApp.Models
+@inject NavigationManager NavigationManager
 @inject IToDoService ToDoService
 @rendermode @(new InteractiveAutoRenderMode(prerender: false))
 
@@ -48,7 +49,7 @@
     private async Task AddToDoItem() 
     {
         var newToDoItem = await ToDoService.AddToDo(ToDoItem);
-        
+        NavigationManager.NavigateTo("todolist");
     }
     // [SupplyParameterFromForm]
     // private ToDoItem ToDoItem { get; set; } = new();
