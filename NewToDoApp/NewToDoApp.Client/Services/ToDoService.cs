@@ -14,13 +14,25 @@ namespace NewToDoApp.Client.Services
 
         public List<TodoItem> ToDos {  get; set; } = new List<TodoItem>();
 
+        public event Action ToDosChanged;
+
         public async Task GetAllToDos()
         {
-            var result = await _http.GetFromJsonAsync<ServiceResponse<List<TodoItem>>>("api/todoitem");
-            if (result != null) 
+            try
             {
-                ToDos = result.Data;
+                var result = await _http.GetFromJsonAsync<ServiceResponse<List<TodoItem>>>("api/GetTodoItems");
+
+                if (result != null)
+                {
+                    ToDos = result.Data;
+                }
             }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
         }
     }
 }

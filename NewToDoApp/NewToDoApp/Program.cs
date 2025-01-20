@@ -6,6 +6,7 @@ using NewToDoApp.Client.Pages;
 using NewToDoApp.Components;
 using NewToDoApp.Components.Account;
 using NewToDoApp.Data;
+using NewToDoApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,8 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
+
+builder.Services.AddScoped<IToDoItemService, ToDoItemService>();
 
 builder.Services.AddControllers();
 
