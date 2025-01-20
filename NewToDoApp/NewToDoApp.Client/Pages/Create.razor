@@ -3,7 +3,7 @@
 @* @using NewToDoApp.Client.Services *@
 @using NewToDoApp.Models
 @inject NavigationManager NavigationManager
-@inject IToDoService ToDoService
+@inject IToDoService _toDoService
 @rendermode @(new InteractiveAutoRenderMode(prerender: false))
 
 @* <MudPopoverProvider /> *@
@@ -48,7 +48,7 @@
     // private async Task AddToDoItem(TodoItem item) 
     private async Task AddToDoItem() 
     {
-        var newToDoItem = await ToDoService.AddToDo(ToDoItem);
+        var newToDoItem = await _toDoService.AddToDo(ToDoItem);
         NavigationManager.NavigateTo("todolist");
     }
     // [SupplyParameterFromForm]

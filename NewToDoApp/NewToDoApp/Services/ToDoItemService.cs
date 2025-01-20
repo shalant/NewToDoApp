@@ -49,5 +49,25 @@ namespace NewToDoApp.Services
 
             return new ServiceResponse<bool> {Data = true};
         }
+
+        public async Task<ServiceResponse<TodoItem>> GetItemByIdAsync(int id)
+        {
+            var response = new ServiceResponse<TodoItem>();
+            var todoItem = await _context.TodoItems.FirstOrDefaultAsync(x => x.Id == id);
+
+            if(todoItem == null)
+            {
+                response.Success = false;
+                response.Message = "Sorry, but this item does not exist";
+            }
+            else
+            {
+                {
+                    response.Data = todoItem;
+                }
+            }
+
+            return response;
+        }
     }
 }

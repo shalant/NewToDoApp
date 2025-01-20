@@ -1,21 +1,22 @@
 ﻿@page "/todolist"
 @using NewToDoApp.Models
 @inject NavigationManager NavigationManager
-@inject IToDoService ToDoService
+@inject IToDoService _toDoService
 @rendermode @(new InteractiveAutoRenderMode(prerender: false))
 
 <MudPopoverProvider />
 
 <h3>ToDoList</h3>
 
-@if(ToDoService.ToDos == null || ToDoService.ToDos.Count == 0)
+@if (_toDoService.ToDos == null || _toDoService.ToDos.Count == 0)
 {
     <p>Loading...</p>
 }
 else
 {
     <div>
-        @if(ToDoService.ToDos == null || ToDoService.ToDos.Count == 0){
+        @if (_toDoService.ToDos == null || _toDoService.ToDos.Count == 0)
+        {
             <p>not wired up brah</p>
         }
         else 
@@ -25,8 +26,8 @@ else
                 <p>@ToDo.Name</p>
             } *@
             <MudButton Href="todolist/create">Create New</MudButton>
-            <MudDataGrid T="TodoItem" Items="ToDoService.ToDos" SelectOnRowClick="true" 
-                EditMode="DataGridEditMode.Form" Bordered="true"
+            <MudDataGrid T="TodoItem" Items="_toDoService.ToDos" SelectOnRowClick="true"
+                         EditMode="DataGridEditMode.Form" Bordered="true"
                 EditTrigger="DataGridEditTrigger.OnRowClick">
                 <Columns>
                     <PropertyColumn Property="x => x.Id" Title="Id" />
@@ -56,13 +57,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        ToDoService.ToDosChanged += StateHasChanged;
-        await ToDoService.GetAllToDos();
+        _toDoService.ToDosChanged += StateHasChanged;
+        await _toDoService.GetAllToDos();
     }
 
     private async Task DeleteTodoItem(int id)
     {
-        await ToDoService.DeleteTodo(id);
+        await _toDoService.DeleteTodo(id);
     }
 
     private void GoToDeletePage(int id){

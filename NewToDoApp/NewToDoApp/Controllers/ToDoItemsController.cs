@@ -37,18 +37,12 @@ namespace NewToDoApp.Controllers
 
         // GET: api/TodoItems/5
         // <snippet_GetByID>
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<ToDoItemDTO>> GetTodoItem(long id)
-        //{
-        //    //var todoItem = await _context.TodoItems.FindAsync(id);
-
-        //    if (todoItem == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return ItemToDTO(todoItem);
-        //}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ServiceResponse<TodoItem>>> GetTodoItem(int id)
+        {
+            var result = _toDoItemService.GetItemByIdAsync(id);
+            return Ok(result);
+        }
         // </snippet_GetByID>
 
         // PUT: api/TodoItems/5
@@ -57,28 +51,28 @@ namespace NewToDoApp.Controllers
         //[HttpPut("{id}")]
         //public async Task<IActionResult> PutTodoItem(long id, ToDoItemDTO todoDTO)
         //{
-            //if (id != todoDTO.Id)
-            //{
-            //    return BadRequest();
-            //}
+        //if (id != todoDTO.Id)
+        //{
+        //    return BadRequest();
+        //}
 
-            //var todoItem = await _context.TodoItems.FindAsync(id);
-            //if (todoItem == null)
-            //{
-            //    return NotFound();
-            //}
+        //var todoItem = await _context.TodoItems.FindAsync(id);
+        //if (todoItem == null)
+        //{
+        //    return NotFound();
+        //}
 
-            //todoItem.Name = todoDTO.Name;
-            //todoItem.IsComplete = todoDTO.IsComplete;
+        //todoItem.Name = todoDTO.Name;
+        //todoItem.IsComplete = todoDTO.IsComplete;
 
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException) when (!TodoItemExists(id))
-            //{
-            //    return NotFound();
-            //}
+        //try
+        //{
+        //    await _context.SaveChangesAsync();
+        //}
+        //catch (DbUpdateConcurrencyException) when (!TodoItemExists(id))
+        //{
+        //    return NotFound();
+        //}
 
         //    return NoContent();
         //}
