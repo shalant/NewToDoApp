@@ -18,10 +18,26 @@ else
         }
         else 
         {
-            @foreach (var ToDo in ToDoService.ToDos)
+            @* @foreach (var ToDo in ToDoService.ToDos)
             {
                 <p>@ToDo.Name</p>
-            }
+            } *@
+            <MudButton Href="create">Create New</MudButton>
+            <MudDataGrid Items="ToDoService.ToDos">
+                <Columns>
+                    <PropertyColumn Property="x => x.Name" Title="Name" />
+                    <TemplateColumn Items="todoitem">
+                        <CellTemplate>
+                            @* <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" /> *@
+                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Details" />
+                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" />
+                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" />
+
+                        </CellTemplate>
+
+                    </TemplateColumn>
+                </Columns>
+            </MudDataGrid>
         }
 
     </div>

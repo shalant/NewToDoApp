@@ -34,5 +34,19 @@ namespace NewToDoApp.Client.Services
             }
             
         }
+
+        public async Task<TodoItem> AddToDo(TodoItem item)
+        {
+            var newToDo = new TodoItem()
+            {
+                Name = item.Name,
+                IsComplete = item.IsComplete,
+                Secret = item.Secret,
+            };
+
+            
+            var result = await _http.PostAsJsonAsync<TodoItem>("api/TodoItem", newToDo);
+            return newToDo;
+        }
     }
 }

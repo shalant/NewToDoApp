@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using NewToDoApp.Data;
 using NewToDoApp.Models;
 
@@ -21,6 +22,15 @@ namespace NewToDoApp.Services
             };
 
             return response;
+        }
+
+        public async Task<TodoItem> AddItemAsync(TodoItem todoItem)
+        {
+            await _context.TodoItems.AddAsync(todoItem);
+            await _context.SaveChangesAsync();
+            return todoItem;
+            
+
         }
     }
 }
