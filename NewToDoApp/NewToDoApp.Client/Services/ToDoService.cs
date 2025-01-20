@@ -20,7 +20,7 @@ namespace NewToDoApp.Client.Services
         {
             try
             {
-                var result = await _http.GetFromJsonAsync<ServiceResponse<List<TodoItem>>>("api/GetTodoItems");
+                var result = await _http.GetFromJsonAsync<ServiceResponse<List<TodoItem>>>("api/TodoItem");
 
                 if (result != null)
                 {
