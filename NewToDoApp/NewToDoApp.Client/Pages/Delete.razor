@@ -37,34 +37,45 @@
             <a href="/todoitems">Back to List</a>
         </EditForm>
     }
-    else
-
 
 </div>
 
 @code {
-    private TodoItem? todoitem;
+    private TodoItem todoitem = null;
     public bool _isLoading = false;
+    private string message = string.Empty;
 
     // [SupplyParameterFromQuery]
     [Parameter]
     public int Id { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    // protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         // _isLoading = true;
         // using var context = DbFactory.CreateDbContext();
-        var todoitem = await _todoService.GetTodoItemById(Id);
+        // var todoitem = await _todoService.GetTodoItemById(Id);
+        var result = await _todoService.GetTodoItemById(Id);
         _isLoading = false;
-        if (todoitem is null)
+        // if (todoitem is null)
+        // {
+        //     NavigationManager.NavigateTo("notfound");
+        // }
+
+        if (!result.Success)
         {
-            NavigationManager.NavigateTo("notfound");
+            message = result.Message;
+        }
+        else
+        {
+            todoitem = result.Data;
         }
     }
 
     private async Task DeleteToDoItem()
     {
         await _todoService.DeleteTodo(Id);
+        NavigationManager.NavigateTo("todolist");
 
     }
 }

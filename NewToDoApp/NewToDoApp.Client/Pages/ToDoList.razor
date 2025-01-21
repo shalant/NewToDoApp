@@ -27,18 +27,17 @@ else
             } *@
             <MudButton Href="todolist/create">Create New</MudButton>
             <MudDataGrid T="TodoItem" Items="_toDoService.ToDos" SelectOnRowClick="true"
-                         EditMode="DataGridEditMode.Form" Bordered="true"
-                EditTrigger="DataGridEditTrigger.OnRowClick">
+            EditMode="DataGridEditMode.Form" Bordered="true"
+            EditTrigger="DataGridEditTrigger.OnRowClick">
                 <Columns>
                     <PropertyColumn Property="x => x.Id" Title="Id" />
                     <PropertyColumn Property="x => x.Name" Title="Name" />
                     <TemplateColumn Items="todoitem">
                         <CellTemplate>
                             @* <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" /> *@
-                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Details" 
-                                
-                            />
-                            @* @OnClick="GoToDeletePage(id)" *@
+                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Details"
+                            OnClick="() => GoToDeletePage(3)" />
+
                             <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" />
                             <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" />
 
@@ -53,6 +52,8 @@ else
 }
 
 @code {
+    public int Id = 3;
+
     public List<TodoItem> ToDoListTrad = new List<TodoItem>();
 
     protected override async Task OnInitializedAsync()
@@ -67,6 +68,6 @@ else
     }
 
     private void GoToDeletePage(int id){
-        NavigationManager.NavigateTo("$todolist/delete/{id}");
+        NavigationManager.NavigateTo($"todoitem/delete/{id}");
     }
 }
