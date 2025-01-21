@@ -1,5 +1,6 @@
 ﻿@page "/todoitem/{id:int}"
 @page "/details/{id:int}"
+@page "/todoitem/details/{id:int}"
 @using NewToDoApp.Models
 @using Microsoft.EntityFrameworkCore
 
@@ -16,10 +17,8 @@ else
     <h4>ID: @todoItem.Id</h4>
     <h4>Name: @todoItem.Name</h4>
     <p>Status: @todoItem.IsComplete</p>
-
 }
     
-
 @code {
     private TodoItem todoItem = null;
     private string message = string.Empty;

@@ -25,25 +25,37 @@ else
             {
                 <p>@ToDo.Name</p>
             } *@
-            <MudButton Href="todolist/create">Create New</MudButton>
+            @* <MudButton Href="todolist/create" >Create New</MudButton> *@
+            <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
+
             <MudDataGrid T="TodoItem" Items="_toDoService.ToDos" SelectOnRowClick="true"
             EditMode="DataGridEditMode.Form" Bordered="true"
             EditTrigger="DataGridEditTrigger.OnRowClick">
                 <Columns>
                     <PropertyColumn Property="x => x.Id" Title="Id" />
                     <PropertyColumn Property="x => x.Name" Title="Name" />
+                    <TemplateColumn Items="todoitem" title="Completed">
+                        <CellTemplate>
+                            <MudCheckBox @bind-Value="@context.Item.IsComplete"></MudCheckBox>
+                        </CellTemplate>
+                    </TemplateColumn>
                     <TemplateColumn Items="todoitem">
                         <CellTemplate>
-                            @* <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" /> *@
-                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Details"
-                            OnClick="() => GoToDeletePage(3)" />
+                            @* OnClick="(() => Edit(context.Item.ID))" *@
+                            <a href="@($"todoitem/details/{context.Item.Id}")"><i class="fa-solid fa-circle-info fa-xl"></i></a>
+                            <a href="@($"todoitem/update/{context.Item.Id}")"><i class="fa-solid fa-pen-to-square fa-xl"></i></a>
+                            <a href="@($"todoitem/delete/{context.Item.Id}")"><i class="fa-solid fa-trash fa-xl"></i></a>
 
+                            @* <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" /> *@
+                            @* <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Details"
+                            OnClick="() => GoToDeletePage(3)" />
                             <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" />
-                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" />
+                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" /> *@
 
                         </CellTemplate>
 
                     </TemplateColumn>
+                    
                 </Columns>
             </MudDataGrid>
         }
@@ -52,9 +64,10 @@ else
 }
 
 @code {
-    public int Id = 3;
+    // public int Id = 3;
 
     public List<TodoItem> ToDoListTrad = new List<TodoItem>();
+    public bool isCompleted = true;
 
     protected override async Task OnInitializedAsync()
     {

@@ -50,7 +50,6 @@ namespace NewToDoApp.Services
                 response.Success = false;
                 response.Message = "Sorry, but this item does not exist";
             }
-           
 
             return response;
         }
