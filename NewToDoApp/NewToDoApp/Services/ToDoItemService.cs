@@ -69,7 +69,7 @@ namespace NewToDoApp.Services
                 Name = todoItem.Name
             };
 
-            _context.TodoItems.Add(updatedTodoItem);
+            _context.TodoItems.Update(updatedTodoItem);
             await _context.SaveChangesAsync();
 
             return updatedTodoItem;

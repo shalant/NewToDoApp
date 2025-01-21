@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Todo.Models\NewToDoApp.Models.csproj" />
     <ProjectReference Include="..\NewToDoApp.Client\NewToDoApp.Client.csproj" />
+    <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.*" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.*" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.*" />

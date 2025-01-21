@@ -1,20 +1,42 @@
-﻿@inherits LayoutComponentBase
+﻿@using Blazored.LocalStorage
+@inherits LayoutComponentBase
+@inject ILocalStorageService LocalStorage
+@inject IJSRuntime JS
 
-<MudThemeProvider Theme="@_theme" IsDarkMode="_isDarkMode" />
+@* <MudThemeProvider Theme="@_theme" IsDarkMode="_isDarkMode" /> *@
+<MudThemeProvider @bind-IsDarkMode="_isDarkMode" Theme="@_theme" />
+
 @* <MudPopoverProvider /> *@
 <MudDialogProvider />
 <MudSnackbarProvider />
 
+
 <MudLayout>
+    <div class="@GetCssClass()">
+
+
     <MudAppBar Elevation="1">
-        <MudText Typo="Typo.h5" Class="ml-3">Application</MudText>
-    </MudAppBar>
+        @* <MudText Typo="Typo.h5" Class="ml-3">Application</MudText> *@
+        <img src="images/ScoutLogo-Black.jpg" alt="Logo" class="scout-logo" />
+        @*         <MudSwitch @bind-Value="_isDarkMode" />*@
+        @* <MudSwitch @bind-Value="_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Toggle Light/Dark Mode" /> *@
+        @* <MudSwitch @bind="ToggleDarkMode()"  Color="Color.Primary" Class="ma-4" T="bool" Label="Toggle Light/Dark Mode" /> *@
+        @* @if (selectedTheme == "" | selectedTheme == "Light")
+        {
+            <i class="fa-solid fa-moon fa-2x" @onclick="() => ChangeTheme()"></i>
+        }
+        else
+        {
+            <i class="fa-solid fa-sun fa-2x" @onclick="() => ChangeTheme()"></i>
+        } *@
+        </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu />
     </MudDrawer>
     <MudMainContent Class="mt-16 pa-4">
         @Body
     </MudMainContent>
+    </div>
 </MudLayout>
 
 
@@ -26,10 +48,14 @@
 
 @code {
     private bool _drawerOpen = true;
-    private bool _isDarkMode = true;
+    // private bool _isDarkMode = true;
+    private bool _isDarkMode;
     private MudTheme? _theme = null;
+    private string selectedTheme;
+    private readonly string keyTheme = "theme";
 
-    protected override void OnInitialized()
+
+    protected override async Task OnInitializedAsync()
     {
         base.OnInitialized();
 
@@ -39,6 +65,22 @@
                 PaletteDark = _darkPalette,
                 LayoutProperties = new LayoutProperties()
             };
+
+        // var themeFromLocalStorage = await JS.InvokeAsync<string>("readLocalStorage", keyTheme);
+
+        // if (!string.IsNullOrEmpty(themeFromLocalStorage))
+        // {
+        //     selectedTheme = themeFromLocalStorage;
+        // }
+    }
+
+    protected async Task OnAfterRenderAsync()
+    {
+        var themeFromLocalStorage = await JS.InvokeAsync<string>("readLocalStorage", keyTheme);
+        if (!string.IsNullOrEmpty(themeFromLocalStorage))
+        {
+            selectedTheme = themeFromLocalStorage;
+        }
     }
 
     private void DrawerToggle()
@@ -96,6 +138,37 @@
         false => Icons.Material.Outlined.DarkMode,
     };
 
+    private string GetCssClass()
+    {
+        // var themeFromLocalStorage = await LocalStorage.GetItemAsStringAsync("theme");
+        // selectedTheme = themeFromLocalStorage;
+        if(selectedTheme == "Light" | selectedTheme == null | selectedTheme == "")
+        // if (themeFromLocalStorage == "Light" | themeFromLocalStorage == null | themeFromLocalStorage == "null")
+        {
+            return string.Empty;
+        }
+        else
+        {
+            return "dark-mode";
+        }
+    }
+
+    private async Task ChangeTheme()
+    {
+        if (selectedTheme == "Light" | selectedTheme == null | selectedTheme == "null")
+        {
+            selectedTheme = "Dark";
+            await JS.InvokeVoidAsync("addToLocalStorage", keyTheme, selectedTheme);
+        }
+        else
+        {
+            selectedTheme = "Light";
+            await JS.InvokeVoidAsync("addToLocalStorage", keyTheme, selectedTheme);
+
+        }
+        
+
+    }
 }
 
 

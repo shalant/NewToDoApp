@@ -70,6 +70,6 @@ else
     private async Task UpdateToDoItem(TodoItem todoItem)
     {
         await _toDoService.UpdateTodoItem(todoitem);
-        NavigationManager.NavigateTo("todolist");
+        NavigationManager.NavigateTo("/");
     }
 }

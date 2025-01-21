@@ -6,31 +6,36 @@
 
 <MudPopoverProvider />
 
-<h3>ToDoList</h3>
 
+<div class="container">
 @if (_toDoService.ToDos == null || _toDoService.ToDos.Count == 0)
 {
     <p>Loading...</p>
 }
 else
 {
-    <div>
+    <div class="home-page">
         @if (_toDoService.ToDos == null || _toDoService.ToDos.Count == 0)
         {
             <p>not wired up brah</p>
         }
         else 
         {
-            @* @foreach (var ToDo in ToDoService.ToDos)
-            {
-                <p>@ToDo.Name</p>
-            } *@
-            @* <MudButton Href="todolist/create" >Create New</MudButton> *@
-            <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
+            <div class="row">
+                <div class="col-md-10">
+                    <h3>ToDoList</h3>
+                </div>
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
+                    </div>
+                </div>
+            </div>
 
+            
             <MudDataGrid T="TodoItem" Items="_toDoService.ToDos" SelectOnRowClick="true"
-            EditMode="DataGridEditMode.Form" Bordered="true"
-            EditTrigger="DataGridEditTrigger.OnRowClick">
+                    EditMode="DataGridEditMode.Form" Bordered="true"
+                    EditTrigger="DataGridEditTrigger.OnRowClick">
                 <Columns>
                     <PropertyColumn Property="x => x.Id" Title="Id" />
                     <PropertyColumn Property="x => x.Name" Title="Name" />
@@ -62,6 +67,7 @@ else
 
     </div>
 }
+</div>
 
 @code {
     // public int Id = 3;

@@ -1,3 +1,20 @@
-﻿.fa-solid {
-    color: pink;
+﻿
+.fa-trash {
+    color: red;
+}
+
+.fa-pen-to-square {
+    color: green;
+}
+
+.fa-circle-info {
+    color: blue;
+}
+
+.scout-logo {
+    width: 150px;
+}
+
+.home-page .fa-solid {
+    margin-right: 10px;
 }
