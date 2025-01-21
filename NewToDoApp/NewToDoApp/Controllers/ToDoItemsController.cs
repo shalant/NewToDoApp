@@ -48,34 +48,36 @@ namespace NewToDoApp.Controllers
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         // <snippet_Update>
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutTodoItem(long id, ToDoItemDTO todoDTO)
-        //{
-        //if (id != todoDTO.Id)
-        //{
-        //    return BadRequest();
-        //}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateToDoItem(TodoItem todoItem)
+        {
+            var result = await _toDoItemService.UpdateItemAsync(todoItem);
+            return Ok(result);
+            //if (id != todoDTO.Id)
+            //{
+            //    return BadRequest();
+            //}
 
-        //var todoItem = await _context.TodoItems.FindAsync(id);
-        //if (todoItem == null)
-        //{
-        //    return NotFound();
-        //}
+            //var todoItem = await _toDoItemService.TodoItems.FindAsync(id);
+            //if (todoItem == null)
+            //{
+            //    return NotFound();
+            //}
 
-        //todoItem.Name = todoDTO.Name;
-        //todoItem.IsComplete = todoDTO.IsComplete;
+            //todoItem.Name = todoDTO.Name;
+            //todoItem.IsComplete = todoDTO.IsComplete;
 
-        //try
-        //{
-        //    await _context.SaveChangesAsync();
-        //}
-        //catch (DbUpdateConcurrencyException) when (!TodoItemExists(id))
-        //{
-        //    return NotFound();
-        //}
+            //try
+            //{
+            //    await _toDoItemService.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException) when (!TodoItemExists(id))
+            //{
+            //    return NotFound();
+            //}
 
-        //    return NoContent();
-        //}
+            //return NoContent();
+        }
         // </snippet_Update>
 
         // POST: api/TodoItems

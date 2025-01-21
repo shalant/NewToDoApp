@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewToDoApp.Data;
 using NewToDoApp.Models;
@@ -60,6 +61,33 @@ namespace NewToDoApp.Services
             await _context.SaveChangesAsync();
             return todoItem;
         }
+
+        public async Task<ActionResult<TodoItem>> UpdateItemAsync(TodoItem todoItem)
+        {
+            var updatedTodoItem = new TodoItem
+            {
+                IsComplete = todoItem.IsComplete,
+                Name = todoItem.Name
+            };
+
+            _context.TodoItems.Add(updatedTodoItem);
+            await _context.SaveChangesAsync();
+
+            return updatedTodoItem;
+        }
+
+        //public Task<ServiceResponse<TodoItem>> UpdateItemAsync(int id)
+        //public Task<ServiceResponse<TodoItem>> UpdateItemAsync(int id)
+        //{
+        //    //var updatedTodoItem = new TodoItem();
+        //    var request = new <TodoItem>
+        //    {
+        //            Id = updatedTodoItem.Id,
+        //            Name = updatedTodoItem.Name,
+        //            IsComplete = updatedTodoItem.IsComplete
+        //        };
+
+        //}
 
         public async Task<ServiceResponse<bool>> DeleteItemAsync(int id)
         {
