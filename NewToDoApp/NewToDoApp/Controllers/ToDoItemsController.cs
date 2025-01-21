@@ -40,7 +40,7 @@ namespace NewToDoApp.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<TodoItem>>> GetTodoItem(int id)
         {
-            var result = _toDoItemService.GetItemByIdAsync(id);
+            var result = await _toDoItemService.GetItemByIdAsync(id);
             return Ok(result);
         }
         // </snippet_GetByID>
