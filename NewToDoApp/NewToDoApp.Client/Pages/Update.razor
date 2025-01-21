@@ -7,23 +7,24 @@
 
 <h3>Update</h3>
 
-<EditForm Model="ToDoItem" OnValidSubmit="UpdateToDoItem">
+@* <EditForm Model="ToDoItem" OnValidSubmit="UpdateToDoItem"> *@
+<EditForm Model="todoitem" OnValidSubmit="() => UpdateToDoItem(todoitem)">
     <DataAnnotationsValidator />
     <ValidationSummary class="text-danger" role="alert" />
     <div class="mb-3">
         <label for="name" class="form-label">Name:</label>
-        <InputText id="name" @bind-Value="ToDoItem.Name" class="form-control" />
-        <ValidationMessage For="() => ToDoItem.Name" class="text-danger" />
+        <InputText id="name" @bind-Value="todoitem.Name" class="form-control" />
+        <ValidationMessage For="() => todoitem.Name" class="text-danger" />
     </div>
     <div class="mb-3">
         <label for="iscomplete" class="form-label">IsComplete:</label>
-        <InputCheckbox id="iscomplete" @bind-Value="ToDoItem.IsComplete" class="form-check-input" />
-        <ValidationMessage For="() => ToDoItem.IsComplete" class="text-danger" />
+        <InputCheckbox id="iscomplete" @bind-Value="todoitem.IsComplete" class="form-check-input" />
+        <ValidationMessage For="() => todoitem.IsComplete" class="text-danger" />
     </div>
     <div class="mb-3">
         <label for="secret" class="form-label">Secret:</label>
-        <InputText id="secret" @bind-Value="ToDoItem.Secret" class="form-control" />
-        <ValidationMessage For="() => ToDoItem.Secret" class="text-danger" />
+        <InputText id="secret" @bind-Value="todoitem.Secret" class="form-control" />
+        <ValidationMessage For="() => todoitem.Secret" class="text-danger" />
     </div>
     <button type="submit" class="btn btn-primary">Create</button>
 </EditForm>
@@ -43,7 +44,7 @@
     protected override async Task OnParametersSetAsync()
     {
         
-        var result = await _todoService.GetTodoItemById(Id);
+        var result = await _toDoService.GetTodoItemById(Id);
         _isLoading = false;
         
 
@@ -57,9 +58,9 @@
         }
     }
 
-    private async Task UpdateToDoItem()
+    private async Task UpdateToDoItem(TodoItem todoItem)
     {
-        var newToDoItem = await _toDoService.UpdateToDoItem(ToDoItem);
+        await _toDoService.UpdateTodoItem(todoitem);
         NavigationManager.NavigateTo("todolist");
     }
 }
