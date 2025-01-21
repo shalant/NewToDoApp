@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Azure;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using NewToDoApp.Data;
 using NewToDoApp.Models;
@@ -20,6 +21,40 @@ namespace NewToDoApp.Services
             {
                 Data = await _context.TodoItems.ToListAsync()
             };
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<TodoItem>> GetItemByIdAsync(int id)
+        {
+            var response = new ServiceResponse<TodoItem>();
+
+            try
+            {
+                response.Data = await _context.TodoItems.FirstOrDefaultAsync();   
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
+            //var todoItem = await _context.TodoItems.FirstOrDefaultAsync(x => x.Id == id);
+            //var todoItem = await _context.TodoItems.Where(x => x.Id == id).FirstOrDefaultAsync();
+            //var todoItem = await _context.TodoItems.FirstOrDefaultAsync();
+
+            var todoItem = response.Data;
+
+            if (todoItem == null)
+            {
+                response.Success = false;
+                response.Message = "Sorry, but this item does not exist";
+            }
+            else
+            {
+                {
+                    response.Data = todoItem;
+                }
+            }
 
             return response;
         }
@@ -50,24 +85,6 @@ namespace NewToDoApp.Services
             return new ServiceResponse<bool> {Data = true};
         }
 
-        public async Task<ServiceResponse<TodoItem>> GetItemByIdAsync(int id)
-        {
-            var response = new ServiceResponse<TodoItem>();
-            var todoItem = await _context.TodoItems.FirstOrDefaultAsync(x => x.Id == id);
-
-            if(todoItem == null)
-            {
-                response.Success = false;
-                response.Message = "Sorry, but this item does not exist";
-            }
-            else
-            {
-                {
-                    response.Data = todoItem;
-                }
-            }
-
-            return response;
-        }
+        
     }
 }
