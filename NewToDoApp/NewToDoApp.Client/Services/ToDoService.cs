@@ -53,6 +53,19 @@ namespace NewToDoApp.Client.Services
             return newToDo;
         }
 
+        public async Task UpdateTodoItem(TodoItem item)
+        {
+            var request = new TodoItem
+            {
+                Id = item.Id,
+                Name = item.Name,
+                IsComplete = item.IsComplete,
+                Secret = item.Secret
+            };
+
+            await _http.PutAsJsonAsync($"api/todoitem/{request.Id}", request);
+        }
+
         public async Task DeleteTodo(int id)
         {
             await _http.DeleteAsync($"api/TodoItem/{id}");

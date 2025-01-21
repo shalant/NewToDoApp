@@ -1,0 +1,65 @@
+﻿@page "/todoitem/update/{id:int}"
+@using Microsoft.EntityFrameworkCore
+@using NewToDoApp.Models
+@inject NavigationManager NavigationManager
+@inject IToDoService _toDoService
+@rendermode @(new InteractiveAutoRenderMode(prerender: false))
+
+<h3>Update</h3>
+
+<EditForm Model="ToDoItem" OnValidSubmit="UpdateToDoItem">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="text-danger" role="alert" />
+    <div class="mb-3">
+        <label for="name" class="form-label">Name:</label>
+        <InputText id="name" @bind-Value="ToDoItem.Name" class="form-control" />
+        <ValidationMessage For="() => ToDoItem.Name" class="text-danger" />
+    </div>
+    <div class="mb-3">
+        <label for="iscomplete" class="form-label">IsComplete:</label>
+        <InputCheckbox id="iscomplete" @bind-Value="ToDoItem.IsComplete" class="form-check-input" />
+        <ValidationMessage For="() => ToDoItem.IsComplete" class="text-danger" />
+    </div>
+    <div class="mb-3">
+        <label for="secret" class="form-label">Secret:</label>
+        <InputText id="secret" @bind-Value="ToDoItem.Secret" class="form-control" />
+        <ValidationMessage For="() => ToDoItem.Secret" class="text-danger" />
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</EditForm>
+
+<div>
+    <a href="/todoitems">Back to List</a>
+</div>
+
+@code {
+    private TodoItem todoitem { get; set; } = null;
+    public bool _isLoading = false;
+    private string message = string.Empty;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        
+        var result = await _todoService.GetTodoItemById(Id);
+        _isLoading = false;
+        
+
+        if (!result.Success)
+        {
+            message = result.Message;
+        }
+        else
+        {
+            todoitem = result.Data;
+        }
+    }
+
+    private async Task UpdateToDoItem()
+    {
+        var newToDoItem = await _toDoService.UpdateToDoItem(ToDoItem);
+        NavigationManager.NavigateTo("todolist");
+    }
+}
