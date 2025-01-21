@@ -29,10 +29,14 @@ namespace NewToDoApp.Client.Services
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
-            
+        }
+
+        public async Task<ServiceResponse<TodoItem>> GetTodoItemById(int id)
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<TodoItem>>($"api/TodoItem/{id}");
+            return result;
         }
 
         public async Task<TodoItem> AddToDo(TodoItem item)
@@ -53,5 +57,7 @@ namespace NewToDoApp.Client.Services
         {
             await _http.DeleteAsync($"api/TodoItem/{id}");
         }
+
+        
     }
 }

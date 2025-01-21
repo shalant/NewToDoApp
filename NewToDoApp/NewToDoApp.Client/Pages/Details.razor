@@ -1,0 +1,43 @@
+﻿@page "/todoitem/{id:int}"
+@page "/details/{id:int}"
+@using NewToDoApp.Models
+@using Microsoft.EntityFrameworkCore
+
+@inject IToDoService _todoService
+@rendermode @(new InteractiveAutoRenderMode(prerender: false))
+
+<h3>Details</h3>
+
+@if(todoItem == null){
+    <p>Loading...</p>
+}
+else
+{
+    <h5>ToDoItem: @todoItem.Name</h5>
+
+}
+    
+
+@code {
+    private TodoItem todoItem = null;
+    private string message = string.Empty;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        message = "Loading ToDo Item";
+        var result = await _todoService.GetTodoItemById(Id);
+
+        if (!result.Success)
+        {
+            message = result.Message;
+        }
+        else
+        {
+            todoItem = result.Data;
+        }
+    }
+
+}
