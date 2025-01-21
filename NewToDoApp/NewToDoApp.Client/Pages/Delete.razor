@@ -4,6 +4,7 @@
 @using NewToDoApp.Models
 @inject NavigationManager NavigationManager
 @inject IToDoService _todoService
+@rendermode @(new InteractiveAutoRenderMode(prerender: false))
 
 <PageTitle>Delete</PageTitle>
 
@@ -13,9 +14,9 @@
 <div>
     <h2>ToDoItem</h2>
     <hr />
-    @if (todoitem is null)
+    @if (todoitem == null)
     {
-        <p><em>Loading...</em></p>
+        <p>Loading...</p>
     }
     else
     {
@@ -36,19 +37,25 @@
             <a href="/todoitems">Back to List</a>
         </EditForm>
     }
+    else
+
+
 </div>
 
 @code {
     private TodoItem? todoitem;
+    public bool _isLoading = false;
 
-    [SupplyParameterFromQuery]
-    private int Id { get; set; }
+    // [SupplyParameterFromQuery]
+    [Parameter]
+    public int Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        // _isLoading = true;
         // using var context = DbFactory.CreateDbContext();
-        // var todoitem = await _todoService.GetAllToDos();
-
+        var todoitem = await _todoService.GetTodoItemById(Id);
+        _isLoading = false;
         if (todoitem is null)
         {
             NavigationManager.NavigateTo("notfound");
@@ -58,5 +65,6 @@
     private async Task DeleteToDoItem()
     {
         await _todoService.DeleteTodo(Id);
+
     }
 }
