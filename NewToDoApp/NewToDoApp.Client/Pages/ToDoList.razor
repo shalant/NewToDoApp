@@ -22,29 +22,38 @@
             else 
             {
                 <div class="row">
-                    <div class="col-md-10">
-                        <h3>Active ToDo Items</h3>
+                    <div class="col-md-7">
+                        <h3>@Header</h3>
                     </div>
-                    <div class="col-md-2">
-                        <div class="mb-3">
-                            <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
-                        </div>
+                    <div class="col-md-5">
+                        @if (taskViewState == "active")
+                        {
+                            <div class="mb-3 d-flex">
+                                <MudButton OnClick="SetTasksToCompleted" Variant="Variant.Filled" Color="Color.Dark" class="me-3">View Completed Tasks</MudButton>
+                                <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">View All Tasks</MudButton>
+                            </div>
+                        }
+                        else if (taskViewState == "completed")
+                        {
+                            <div class="mb-3 d-flex">
+                                <MudButton OnClick="SetTasksToActive" Variant="Variant.Filled" Color="Color.Dark" class="me-3">View Active Tasks</MudButton>
+                                <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">View All Tasks</MudButton>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="mb-3 d-flex">
+                                <MudButton OnClick="SetTasksToActive" Variant="Variant.Filled" Color="Color.Dark" class="me-3">View Active Tasks</MudButton>
+                                <MudButton OnClick="SetTasksToCompleted" Variant="Variant.Filled" Color="Color.Dark">View Completed Tasks</MudButton>
+                            </div>
+                        }
                     </div>
                 </div>
-                @if (isCompleted)
-                {
-                    <div class="mb-3">
-                        <MudButton OnClick="ToggleCompletedTasks" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">View Completed Tasks</MudButton>
-                    </div>
-                }
-                else
-                {
-                    <div class="mb-3">
-                        <MudButton OnClick="ToggleCompletedTasks" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">View Active Tasks</MudButton>
-                    </div>
-                }
 
-
+                <div class="mb-3">
+                    <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
+                </div>
+                @* <MudDataGrid T="TodoItem" Items="ToDoListTrad" SelectOnRowClick="true" *@
                 <MudDataGrid T="TodoItem" Items="_toDoService.ToDos" SelectOnRowClick="true"
                 EditMode="DataGridEditMode.Form" Bordered="true"
                 EditTrigger="DataGridEditTrigger.OnRowClick">
@@ -82,37 +91,72 @@
 </div>
 
 @code {
-    // public int Id = 3;
-
     public List<TodoItem> ToDoListTrad = new List<TodoItem>();
-    public bool isCompleted = true;
+    public string taskViewState = "active";
     public bool activeTasks = true;
+    public string Header = "Active Tasks";
 
     protected override async Task OnInitializedAsync()
     {
         _toDoService.ToDosChanged += StateHasChanged;
-        if (isCompleted)
+        await _toDoService.GetAllToDos();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _toDoService.ToDosChanged += StateHasChanged;
+        await _toDoService.GetAllToDos();
+        // ToDoListTrad = _toDoService.ToDos.Where(x => x.IsComplete == false).ToList();
+        // if (taskViewState == "active")
+        // {
+        //     _toDoService.ToDos = _toDoService.ToDos.Where(x => x.IsComplete == false).ToList();
+        // }
+        // else if (taskViewState == "completed")
+        // {
+        //     _toDoService.ToDos = _toDoService.ToDos.Where(x => x.IsComplete == true).ToList();
+        // }
+        // else
+        // {
+        //     _toDoService.ToDos = _toDoService.ToDos.ToList();
+        // }
+    }
+
+    private void LoadState()
+    {
+        if(taskViewState == "completed")
         {
             _toDoService.ToDos = _toDoService.ToDos.Where(x => x.IsComplete == true).ToList();
         }
-        else
+        else if (taskViewState == "active")
         {
             _toDoService.ToDos = _toDoService.ToDos.Where(x => x.IsComplete == false).ToList();
-
+        }
+        else 
+        {
+            _toDoService.ToDos = _toDoService.ToDos;
         }
     }
 
-    private void ToggleCompletedTasks()
+
+    private void SetTasksToCompleted()
     {
-        isCompleted = !isCompleted;
-        if (isCompleted)
-        {
-            _toDoService.ToDos = _toDoService.ToDos.Where(x => x.IsComplete == true).ToList();
-        }
-        else
-        {
-            _toDoService.ToDos = _toDoService.ToDos.Where(x => x.IsComplete == false).ToList();
-        }
+        taskViewState = "completed";
+        Header = "All Completed Tasks";
+        LoadState();
+    }
+    
+    private void SetTasksToAll()
+    {
+        taskViewState = "all";
+        Header = "All Tasks";
+        LoadState();
+    }
+    
+    private void SetTasksToActive()
+    {
+        taskViewState = "active";
+        Header = "All Active Tasks";
+        LoadState();
     }
 
     private async Task DeleteTodoItem(int id)
