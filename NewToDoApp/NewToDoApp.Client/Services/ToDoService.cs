@@ -16,7 +16,7 @@ namespace NewToDoApp.Client.Services
 
         public event Action ToDosChanged;
 
-        public async Task GetAllToDos()
+        public async Task<List<TodoItem>> GetAllToDos()
         {
             try
             {
@@ -31,24 +31,28 @@ namespace NewToDoApp.Client.Services
             {
                 throw ex;
             }
+            return ToDos;
         }
 
-        public async Task GetActiveTodos()
+        public async Task<List<TodoItem>> GetActiveTodos()
         {
             var result = await _http.GetFromJsonAsync<ServiceResponse<List<TodoItem>>>("api/TodoItem");
             if (result != null)
             {
                 ToDos = result.Data.Where(x => x.IsComplete == false).ToList();
             }
+
+            return ToDos;
         }
         
-        public async Task GetCompletedTodos()
+        public async Task<List<TodoItem>> GetCompletedTodos()
         {
             var result = await _http.GetFromJsonAsync<ServiceResponse<List<TodoItem>>>("api/TodoItem");
             if (result != null)
             {
                 ToDos = result.Data.Where(x => x.IsComplete == true).ToList();
             }
+            return ToDos;
         }
 
         public async Task<ServiceResponse<TodoItem>> GetTodoItemById(int id)
