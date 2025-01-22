@@ -7,12 +7,16 @@
 <MudPopoverProvider />
 
 <div class="container">
-    @if (_toDoService.ToDos == null || _toDoService.ToDos.Count == 0)
+    @if(isLoading)
     {
         <MudSkeleton SkeletonType="SkeletonType.Text" Height="40px" />
         <MudSkeleton SkeletonType="SkeletonType.Text" Height="40px" />
         <MudSkeleton SkeletonType="SkeletonType.Text" Height="40px" />
         <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="800px" Height="410px" />
+    }
+    else if (_toDoService.ToDos == null || _toDoService.ToDos.Count == 0)
+    {
+        <p>Sorry, there are no @taskViewState tasks</p>
         @* <p>Loading...</p> *@
         @* <p>@taskViewState</p> *@
     }
@@ -20,30 +24,33 @@
     {
         <div class="home-page">
             <div class="row">
-                <div class="col-md-7">
+                <div class="col-md-7 col-sm-6">
                     <h3>@Header: @_toDoService.ToDos.Count</h3>
                     @* <p>taskViewState</p> *@
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-5 col-sm-6" >
                     @if (taskViewState == "active")
                     {
                         <div class="mb-3 d-flex">
-                            <MudButton OnClick="SetTasksToCompleted" Variant="Variant.Filled" Color="Color.Dark" class="me-3">View Completed Tasks</MudButton>
-                            <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">View All Tasks</MudButton>
+                            <h5 class="me-2 mt-2">View: </h5>
+                            <MudButton OnClick="SetTasksToCompleted" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Completed Tasks</MudButton>
+                            <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">All Tasks</MudButton>
                         </div>
                     }
                     else if (taskViewState == "completed")
                     {
                         <div class="mb-3 d-flex">
-                            <MudButton OnClick="SetTasksToActive" Variant="Variant.Filled" Color="Color.Dark" class="me-3">View Active Tasks</MudButton>
-                            <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">View All Tasks</MudButton>
+                            <h5 class="me-2 mt-2">View: </h5>
+                            <MudButton OnClick="SetTasksToActive" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Active Tasks</MudButton>
+                            <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">All Tasks</MudButton>
                         </div>
                     }
                     else
                     {
                         <div class="mb-3 d-flex">
-                            <MudButton OnClick="SetTasksToActive" Variant="Variant.Filled" Color="Color.Dark" class="me-3">View Active Tasks</MudButton>
-                            <MudButton OnClick="SetTasksToCompleted" Variant="Variant.Filled" Color="Color.Dark">View Completed Tasks</MudButton>
+                            <h5 class="me-2 mt-2">View: </h5>
+                            <MudButton OnClick="SetTasksToActive" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Active Tasks</MudButton>
+                            <MudButton OnClick="SetTasksToCompleted" Variant="Variant.Filled" Color="Color.Dark">Completed Tasks</MudButton>
                         </div>
                     }
                 </div>
@@ -93,12 +100,14 @@
     public string taskViewState = "active";
     public bool activeTasks = true;
     public string Header = "Active Tasks";
+    public bool isLoading = true;
 
     protected override async Task OnInitializedAsync()
     {        
         _toDoService.ToDosChanged += StateHasChanged;
         _toDoService.ToDos = await _toDoService.GetActiveTodos();
-        LoadState();        
+        LoadState();
+        isLoading = false;
     }
 
     // protected override async Task OnParametersSetAsync()
