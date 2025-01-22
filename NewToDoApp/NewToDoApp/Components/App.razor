@@ -35,6 +35,15 @@
             return localStorage[key];
         }
     </script>
+
+    @* <script>
+        Blazor.start({
+          reconnectionHandler: {
+            onConnectionDown: (options, error) => console.error(error),
+            onConnectionUp: () => console.log("Up, up, and away!")
+          }
+        });
+    </script> *@
 </body>
 
 </html>

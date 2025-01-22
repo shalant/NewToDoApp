@@ -9,11 +9,10 @@
 <div class="container">
     @if (_toDoService.ToDos == null || _toDoService.ToDos.Count == 0)
     {
-        <MudSkeleton />
-        <MudSkeleton />
-        <MudSkeleton />
-        @* <MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" /> *@
-        <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="200px" Height="110px" />
+        <MudSkeleton SkeletonType="SkeletonType.Text" Height="40px" />
+        <MudSkeleton SkeletonType="SkeletonType.Text" Height="40px" />
+        <MudSkeleton SkeletonType="SkeletonType.Text" Height="40px" />
+        <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="800px" Height="410px" />
         @* <p>Loading...</p> *@
         @* <p>@taskViewState</p> *@
     }
@@ -102,10 +101,10 @@
         LoadState();        
     }
 
-    protected override async Task OnParametersSetAsync()
-    {
-        _toDoService.ToDosChanged += StateHasChanged;
-    }
+    // protected override async Task OnParametersSetAsync()
+    // {
+    //     _toDoService.ToDosChanged += StateHasChanged;
+    // }
 
     private async void LoadState()
     {

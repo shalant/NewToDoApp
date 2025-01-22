@@ -1,6 +1,13 @@
-﻿html, body {
+﻿:root {
+    --mud-typography-default-family: 'Montserrat';
+    --mud-typography-button-family: 'Montserrat' !important;
+}
+
+html, body {
     font-family: "Montserrat";
 }
+
+
 
 .fa-trash {
     color: red;
