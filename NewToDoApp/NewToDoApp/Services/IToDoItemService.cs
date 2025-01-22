@@ -9,7 +9,7 @@ namespace NewToDoApp.Services
         Task<TodoItem> AddItemAsync(TodoItem todoItem);
         Task<ServiceResponse<TodoItem>> GetItemByIdAsync(int id);
         //Task<ServiceResponse<TodoItem>> UpdateItemAsync(int id);
-        Task<ActionResult<TodoItem>> UpdateItemAsync(TodoItem todoItem);
+        Task<ActionResult<TodoItem>> UpdateItemAsync(int id, TodoItem todoItem);
         Task<ServiceResponse<bool>> DeleteItemAsync(int id);
 
     }

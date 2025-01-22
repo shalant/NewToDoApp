@@ -61,18 +61,32 @@ namespace NewToDoApp.Services
             return todoItem;
         }
 
-        public async Task<ActionResult<TodoItem>> UpdateItemAsync(TodoItem todoItem)
+        //public async Task<ActionResult<TodoItem>> UpdateItemAsync(TodoItem todoItem)
+        public async Task<ActionResult<TodoItem>> UpdateItemAsync(int id, TodoItem todoItem)
         {
-            var updatedTodoItem = new TodoItem
+            var itemToBeUpdated = await _context.TodoItems.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            if (todoItem == null)
             {
-                IsComplete = todoItem.IsComplete,
-                Name = todoItem.Name
-            };
+                return todoItem;
+            }
 
-            _context.TodoItems.Update(updatedTodoItem);
+            itemToBeUpdated.Name = todoItem.Name;
+            itemToBeUpdated.IsComplete = todoItem.IsComplete;
+
             await _context.SaveChangesAsync();
+            //var updatedTodoItem = new TodoItem
+            //{
+            //    Id = todoItem.Id,
+            //    IsComplete = todoItem.IsComplete,
+            //    Name = todoItem.Name,
+            //    Secret = todoItem.Secret
+            //};
 
-            return updatedTodoItem;
+            //_context.TodoItems.Update(updatedTodoItem);
+            //await _context.SaveChangesAsync();
+
+            return itemToBeUpdated;
         }
 
         //public Task<ServiceResponse<TodoItem>> UpdateItemAsync(int id)

@@ -38,7 +38,7 @@ namespace NewToDoApp.Controllers
         // GET: api/TodoItems/5
         // <snippet_GetByID>
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<TodoItem>>> GetTodoItem(int id)
+        public async Task<ActionResult<ServiceResponse<TodoItem>>> GetTodoItem(int id, TodoItem todoItem)
         {
             var result = await _toDoItemService.GetItemByIdAsync(id);
             return Ok(result);
@@ -49,9 +49,9 @@ namespace NewToDoApp.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         // <snippet_Update>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateToDoItem(TodoItem todoItem)
+        public async Task<IActionResult> UpdateToDoItem(int id, TodoItem todoItem)
         {
-            var result = await _toDoItemService.UpdateItemAsync(todoItem);
+            var result = await _toDoItemService.UpdateItemAsync(id, todoItem);
             return Ok(result);
             //if (id != todoDTO.Id)
             //{
