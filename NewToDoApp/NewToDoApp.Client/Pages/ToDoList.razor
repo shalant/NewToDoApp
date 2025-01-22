@@ -6,20 +6,22 @@
 
 <MudPopoverProvider />
 
-
 <div class="container">
     @if (_toDoService.ToDos == null || _toDoService.ToDos.Count == 0)
     {
-        <p>Loading...</p>
-        <p>@taskViewState</p>
+        <MudSkeleton />
+        <MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
+        <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="200px" Height="110px" />
+        @* <p>Loading...</p> *@
+        @* <p>@taskViewState</p> *@
     }
     else
     {
         <div class="home-page">
             <div class="row">
                 <div class="col-md-7">
-                    <h3>@Header</h3>
-                    <p>taskViewState</p>
+                    <h3>@Header: @_toDoService.ToDos.Count</h3>
+                    @* <p>taskViewState</p> *@
                 </div>
                 <div class="col-md-5">
                     @if (taskViewState == "active")
@@ -48,17 +50,20 @@
 
             <div class="mb-3">
                 <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
+                @if(taskViewState == "completed")
+                {
+                    <MudButton @onclick="() => DeleteAll()" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error">Delete all</MudButton>
+                }
             </div>
-            @* <MudDataGrid T="TodoItem" Items="ToDoListTrad" SelectOnRowClick="true" *@
             <MudDataGrid T="TodoItem" Items="_toDoService.ToDos" SelectOnRowClick="true"
-            EditMode="DataGridEditMode.Form" Bordered="true"
+            EditMode="DataGridEditMode.Form" Bordered="true" Elevation="15"
             EditTrigger="DataGridEditTrigger.OnRowClick">
                 <Columns>
                     <PropertyColumn Property="x => x.Id" Title="Id" />
                     <PropertyColumn Property="x => x.Name" Title="Name" />
                     <TemplateColumn Items="todoitem" title="Completed">
                         <CellTemplate>
-                            <MudCheckBox @bind-Value="@context.Item.IsComplete"></MudCheckBox>
+                            <MudCheckBox @bind-Value="@context.Item.IsComplete" @onclick="() => ChangeCompleteness(context.Item)"></MudCheckBox>
                         </CellTemplate>
                     </TemplateColumn>
                     <TemplateColumn Items="todoitem">
@@ -98,20 +103,6 @@
     protected override async Task OnParametersSetAsync()
     {
         _toDoService.ToDosChanged += StateHasChanged;
-        // await _toDoService.GetAllToDos();
-        // ToDoListTrad = _toDoService.ToDos.Where(x => x.IsComplete == false).ToList();
-        // if (taskViewState == "active")
-        // {
-        //     _toDoService.ToDos = _toDoService.ToDos.Where(x => x.IsComplete == false).ToList();
-        // }
-        // else if (taskViewState == "completed")
-        // {
-        //     _toDoService.ToDos = _toDoService.ToDos.Where(x => x.IsComplete == true).ToList();
-        // }
-        // else
-        // {
-        //     _toDoService.ToDos = _toDoService.ToDos.ToList();
-        // }
     }
 
     private async void LoadState()
@@ -141,7 +132,7 @@
         LoadState();
         _toDoService.ToDosChanged += StateHasChanged;
     }
-    
+
     private void SetTasksToAll()
     {
         taskViewState = "all";
@@ -149,7 +140,7 @@
         LoadState();
         _toDoService.ToDosChanged += StateHasChanged;
     }
-    
+
     private void SetTasksToActive()
     {
         taskViewState = "active";
@@ -158,9 +149,24 @@
         _toDoService.ToDosChanged += StateHasChanged;
     }
 
+    private async Task ChangeCompleteness(TodoItem itemToUpdate)
+    {
+        itemToUpdate.IsComplete = !itemToUpdate.IsComplete;
+        await _toDoService.UpdateTodoItem(itemToUpdate);
+        LoadState();
+        _toDoService.ToDosChanged += StateHasChanged;
+    }
+
     private async Task DeleteTodoItem(int id)
     {
         await _toDoService.DeleteTodo(id);
+    }
+
+    private async Task DeleteAll()
+    {
+        await _toDoService.DeleteAllCompleted();
+        LoadState();
+        _toDoService.ToDosChanged += StateHasChanged;
     }
 
     private void GoToDeletePage(int id){

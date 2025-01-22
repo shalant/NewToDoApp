@@ -93,6 +93,22 @@ namespace NewToDoApp.Client.Services
             await _http.DeleteAsync($"api/TodoItem/{id}");
         }
 
-        
+        public async Task<List<TodoItem>> DeleteAllCompleted()
+        {
+            var completedTodosToDelete = new List<TodoItem>();
+            foreach (var item in ToDos)
+            {
+                if (item.IsComplete = true)
+                {
+                    completedTodosToDelete.Add(item);
+                    await _http.DeleteAsync($"api/TodoItem/{item.Id}");
+                }
+                else
+                {
+                    completedTodosToDelete = ToDos;
+                }
+            }
+            return completedTodosToDelete;
+        }
+        }
     }
-}

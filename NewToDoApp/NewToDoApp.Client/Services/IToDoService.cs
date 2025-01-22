@@ -13,5 +13,6 @@ namespace NewToDoApp.Client.Services
         Task<TodoItem> AddToDo(TodoItem item);
         Task UpdateTodoItem(TodoItem item);
         Task DeleteTodo(int id);
+        Task<List<TodoItem>> DeleteAllCompleted();
     }
 }
