@@ -2,9 +2,12 @@
 @using NewToDoApp.Models
 @inject NavigationManager NavigationManager
 @inject IToDoService _toDoService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
 @rendermode @(new InteractiveAutoRenderMode(prerender: false))
 
 <MudPopoverProvider />
+<MudDialogProvider />
 
 <div class="container">
     @if(isLoading)
@@ -77,9 +80,15 @@
                     <TemplateColumn Items="todoitem">
                         <CellTemplate>
                             @* OnClick="(() => Edit(context.Item.ID))" *@
-                            <a href="@($"todoitem/details/{context.Item.Id}")"><i class="fa-solid fa-circle-info fa-xl"></i></a>
-                            <a href="@($"todoitem/update/{context.Item.Id}")"><i class="fa-solid fa-pen-to-square fa-xl"></i></a>
-                            <a href="@($"todoitem/delete/{context.Item.Id}")"><i class="fa-solid fa-trash fa-xl"></i></a>
+                            
+                            <MudIconButton @onclick="OpenDeleteDialog" Icon="@Icons.Material.Filled.Info" Color="Color.Primary" aria-label="delete" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" aria-label="delete" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" />
+
+                            @* I WANT TO USE THIS ONE... *@
+                            @* <a href="@($"todoitem/details/{context.Item.Id}")"><i class="fa-solid fa-circle-info fa-xl"></i></a>
+                            <a href="@($"todoitem/update/{context.Item.Id}")"><i class="fa-solid fa-pen-to-square fa-xl"></i></a> *@
+                            @* <a @onclick="() => DeleteTodoItem(context.Item.Id)" href="@($"todoitem/delete/{context.Item.Id}")"><i class="fa-solid fa-trash fa-xl"></i></a> *@
 
                             @* <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" /> *@
                             @* <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Details"
@@ -167,8 +176,23 @@
         _toDoService.ToDosChanged += StateHasChanged;
     }
 
+    private Task OpenDeleteDialog() 
+    {
+        var parameters = new DialogParameters<DialogTemplateExample_Dialog>
+        {
+            { x => x.ContentText, "Do you really want to delete these records? This process cannot be undone." },
+            { x => x.ButtonText, "Delete" },
+            { x => x.Color, Color.Error }
+        };
+
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+        return DialogService.ShowAsync<DialogTemplateExample_Dialog>("Delete", parameters, options);
+    }
+
     private async Task DeleteTodoItem(int id)
     {
+
         await _toDoService.DeleteTodo(id);
     }
 
@@ -182,4 +206,6 @@
     private void GoToDeletePage(int id){
         NavigationManager.NavigateTo($"todoitem/delete/{id}");
     }
+
+
 }
