@@ -33,6 +33,24 @@ namespace NewToDoApp.Client.Services
             }
         }
 
+        public async Task GetActiveTodos()
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<TodoItem>>>("api/TodoItem");
+            if (result != null)
+            {
+                ToDos = result.Data.Where(x => x.IsComplete == false).ToList();
+            }
+        }
+        
+        public async Task GetCompletedTodos()
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<TodoItem>>>("api/TodoItem");
+            if (result != null)
+            {
+                ToDos = result.Data.Where(x => x.IsComplete == true).ToList();
+            }
+        }
+
         public async Task<ServiceResponse<TodoItem>> GetTodoItemById(int id)
         {
             var result = await _http.GetFromJsonAsync<ServiceResponse<TodoItem>>($"api/TodoItem/{id}");

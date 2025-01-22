@@ -7,6 +7,7 @@ namespace NewToDoApp.Client.Services
         event Action ToDosChanged;
         List<TodoItem> ToDos {  get; set; }
         Task GetAllToDos();
+        Task GetActiveTodos();
         Task<ServiceResponse<TodoItem>> GetTodoItemById(int id);
         Task<TodoItem> AddToDo(TodoItem item);
         Task UpdateTodoItem(TodoItem item);

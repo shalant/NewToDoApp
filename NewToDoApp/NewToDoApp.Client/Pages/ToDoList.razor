@@ -99,13 +99,14 @@
     protected override async Task OnInitializedAsync()
     {
         _toDoService.ToDosChanged += StateHasChanged;
-        await _toDoService.GetAllToDos();
+        await _toDoService.GetActiveTodos();
+        LoadState();
     }
 
     protected override async Task OnParametersSetAsync()
     {
         _toDoService.ToDosChanged += StateHasChanged;
-        await _toDoService.GetAllToDos();
+        // await _toDoService.GetAllToDos();
         // ToDoListTrad = _toDoService.ToDos.Where(x => x.IsComplete == false).ToList();
         // if (taskViewState == "active")
         // {
