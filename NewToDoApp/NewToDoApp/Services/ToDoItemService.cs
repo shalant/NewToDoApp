@@ -29,26 +29,31 @@ namespace NewToDoApp.Services
         public async Task<ServiceResponse<TodoItem>> GetItemByIdAsync(int id)
         {
             var response = new ServiceResponse<TodoItem>();
+            var todoItem = await _context.TodoItems.FirstOrDefaultAsync(t => t.Id == id);
 
-            try
-            {
-                response.Data = await _context.TodoItems.FirstOrDefaultAsync();   
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            //try
+            //{
+            //    response.Data = await _context.TodoItems.FirstOrDefaultAsync();   
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
             
             //var todoItem = await _context.TodoItems.FirstOrDefaultAsync(x => x.Id == id);
             //var todoItem = await _context.TodoItems.Where(x => x.Id == id).FirstOrDefaultAsync();
             //var todoItem = await _context.TodoItems.FirstOrDefaultAsync();
 
-            var todoItem = response.Data;
+            //var todoItem = response.Data;
 
             if (todoItem == null)
             {
                 response.Success = false;
                 response.Message = "Sorry, but this item does not exist";
+            }
+            else
+            {
+                response.Data = todoItem;
             }
 
             return response;
