@@ -32,6 +32,23 @@
                 <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
             </div>
         }
+        else if (taskViewState == "completed")
+        {
+            <div class="mb-3 d-flex">
+                <h5 class="me-2 mt-2">View: </h5>
+                <MudButton OnClick="SetTasksToActive" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Active Tasks</MudButton>
+                <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">All Tasks</MudButton>
+            </div>
+            <div class="mb-3">
+                <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
+            </div>
+        }
+        else
+        {
+            <div class="mb-3">
+                <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
+            </div>
+        }
     }
     else
     {
@@ -74,7 +91,9 @@
                 <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
                 @if(taskViewState == "completed")
                 {
-                    <MudButton @onclick="() => DeleteAll()" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" class="ms-2">Delete all</MudButton>
+                    @* <MudButton @onclick="() => DeleteAll()" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" class="ms-2">Delete all</MudButton> *@
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" class="ms-2"
+                               data-bs-toggle="modal" data-bs-target="#deleteAllModal">Delete all</MudButton>
                 }
             </div>
             <MudDataGrid T="TodoItem" Items="_toDoService.ToDos" SelectOnRowClick="true"
@@ -110,7 +129,7 @@
     }
 </div>
 
-<!-- Modal -->
+<!-- Delete Single Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -121,6 +140,22 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button @onclick="() => DeleteTodoItem(idForDelete)" type="button" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete All Modal -->
+<div class="modal fade" id="deleteAllModal" tabindex="-1" aria-labelledby="deleteAllModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to delete all completed tasks?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button @onclick="() => DeleteAll()" type="button" class="btn btn-danger" data-bs-dismiss="modal">Delete All</button>
             </div>
         </div>
     </div>
@@ -226,8 +261,10 @@
     private async Task DeleteAll()
     {
         await _toDoService.DeleteAllCompleted();
+        SnackbarService.Add("Deleted all completed tasks", Severity.Error);
         LoadState();
         _toDoService.ToDosChanged += StateHasChanged;
+        NavigationManager.NavigateTo("/");
     }
 
     private void GoToDeletePage(int id){
