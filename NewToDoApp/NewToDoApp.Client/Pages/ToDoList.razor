@@ -21,8 +21,17 @@
     else if (_toDoService.ToDos == null || _toDoService.ToDos.Count == 0)
     {
         <p>Sorry, there are no @taskViewState tasks</p>
-        @* <p>Loading...</p> *@
-        @* <p>@taskViewState</p> *@
+        @if (taskViewState == "active")
+        {
+            <div class="mb-3 d-flex">
+                <h5 class="me-2 mt-2">View: </h5>
+                <MudButton OnClick="SetTasksToCompleted" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Completed Tasks</MudButton>
+                <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">All Tasks</MudButton>
+            </div>
+            <div class="mb-3">
+                <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
+            </div>
+        }
     }
     else
     {
@@ -64,7 +73,7 @@
                 <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
                 @if(taskViewState == "completed")
                 {
-                    <MudButton @onclick="() => DeleteAll()" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error">Delete all</MudButton>
+                    <MudButton @onclick="() => DeleteAll()" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" class="ms-2">Delete all</MudButton>
                 }
             </div>
             <MudDataGrid T="TodoItem" Items="_toDoService.ToDos" SelectOnRowClick="true"
@@ -128,14 +137,14 @@
             </div> *@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button @onclick="() => DeleteTodoItem(idForDelete)" type="button" class="btn btn-danger">Delete</button>
+                <button @onclick="() => DeleteTodoItem(idForDelete)" type="button" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Edit Checkbox TOAST -->
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
+@* <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
             <img src="..." class="rounded me-2" alt="...">
@@ -147,7 +156,7 @@
             Hello, world! This is a toast message.
         </div>
     </div>
-</div>
+</div> *@
 
 @code {
     public List<TodoItem> ToDoListTrad = new List<TodoItem>();
@@ -196,7 +205,7 @@
     private void SetTasksToCompleted()
     {
         taskViewState = "completed";
-        Header = "All Completed Tasks";
+        Header = "Completed Tasks";
         LoadState();
         _toDoService.ToDosChanged += StateHasChanged;
     }
@@ -212,7 +221,7 @@
     private void SetTasksToActive()
     {
         taskViewState = "active";
-        Header = "All Active Tasks";
+        Header = "Active Tasks";
         LoadState();
         _toDoService.ToDosChanged += StateHasChanged;
     }
@@ -240,8 +249,11 @@
     // private async Task DeleteTodoItem(int id)
     private async Task DeleteTodoItem(int idForDelete)
     {
-
         await _toDoService.DeleteTodo(idForDelete);
+        SnackbarService.Add($"Deleted task #{idForDelete}", Severity.Error);
+        LoadState();
+        _toDoService.ToDosChanged += StateHasChanged;
+        NavigationManager.NavigateTo("/");
     }
 
     private async Task DeleteAll()

@@ -3,7 +3,10 @@
 @using NewToDoApp.Models
 @inject NavigationManager NavigationManager
 @inject IToDoService _toDoService
+@inject ISnackbar SnackbarService
 @rendermode @(new InteractiveAutoRenderMode(prerender: false))
+
+<MudSnackbarProvider />
 
 <h3>Update</h3>
 
@@ -70,6 +73,7 @@ else
     private async Task UpdateToDoItem(TodoItem todoItem)
     {
         await _toDoService.UpdateTodoItem(todoitem);
+        SnackbarService.Add($"Updated task #{todoitem.Id}", Severity.Success);
         NavigationManager.NavigateTo("/");
     }
 }

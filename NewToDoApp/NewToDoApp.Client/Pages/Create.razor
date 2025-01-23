@@ -4,19 +4,18 @@
 @using NewToDoApp.Models
 @inject NavigationManager NavigationManager
 @inject IToDoService _toDoService
+@inject ISnackbar SnackbarService
 @rendermode @(new InteractiveAutoRenderMode(prerender: false))
 
-@* <MudPopoverProvider /> *@
+<MudSnackbarProvider />
+<MudPopoverProvider />
 
-<h3>Create</h3>
 <PageTitle>Create</PageTitle>
 
-<h1>Create</h1>
+<h3>Add a new task</h3>
 
-<h2>ToDoItem</h2>
-<hr />
-
-<EditForm Model="ToDoItem" OnValidSubmit="AddToDoItem">
+<MudCard>
+<EditForm Model="ToDoItem" OnValidSubmit="AddToDoItem" class="p-3">
     <DataAnnotationsValidator />
     <ValidationSummary class="text-danger" role="alert" />
     <div class="mb-3">
@@ -36,8 +35,8 @@
     </div>
     <button type="submit" class="btn btn-primary">Create</button>
 </EditForm>
-
-<div>
+</MudCard>
+<div class="mt-3">
     <a href="/todoitems">Back to List</a>
 </div>
 
@@ -49,6 +48,7 @@
     private async Task AddToDoItem() 
     {
         var newToDoItem = await _toDoService.AddToDo(ToDoItem);
+        SnackbarService.Add($"Added new task", Severity.Success);
         NavigationManager.NavigateTo("todolist");
     }
     // [SupplyParameterFromForm]
