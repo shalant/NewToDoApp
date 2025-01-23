@@ -14,10 +14,17 @@
 }
 else
 {
-    <h4>ID: @todoItem.Id</h4>
-    <h4>Name: @todoItem.Name</h4>
-    <p>Status: @todoItem.IsComplete</p>
+    <h5>ID: @todoItem.Id</h5>
+    <h5>Name: @todoItem.Name</h5>
+    <label for="iscomplete" class="form-label">Is Complete:</label>
+    <InputCheckbox readonly id="iscomplete" @bind-Value="todoItem.IsComplete" class="form-check-input" />
+    <p>Short description: @todoItem.ShortDescription</p>
 }
+<MudButton href="@($"/todoitem/update/{todoItem!.Id}")" Variant="Variant.Filled" Color="Color.Success" class="me-3">Edit</MudButton>
+<div class="mt-2">
+    <a href="/todoitems">Back to List</a>
+</div>
+
     
 @code {
     private TodoItem todoItem = null;

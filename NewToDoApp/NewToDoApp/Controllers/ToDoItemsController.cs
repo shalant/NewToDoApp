@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NewToDoApp.Data;
 using NewToDoApp.Models;
 using NewToDoApp.Services;
 

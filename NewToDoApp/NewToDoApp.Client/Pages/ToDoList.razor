@@ -10,7 +10,7 @@
 <MudPopoverProvider />
 <MudSnackbarProvider />
 
-<div class="container">
+<div class="container @isCompleted">
     @if(isLoading)
     {
         <MudSkeleton SkeletonType="SkeletonType.Text" Height="40px" />
@@ -39,6 +39,7 @@
             <div class="row">
                 <div class="col-md-7 col-sm-6">
                     <h3>@Header: @_toDoService.ToDos.Count</h3>
+                    <p>@isCompleted</p>
                     @* <p>taskViewState</p> *@
                 </div>
                 <div class="col-md-5 col-sm-6" >
@@ -77,8 +78,8 @@
                 }
             </div>
             <MudDataGrid T="TodoItem" Items="_toDoService.ToDos" SelectOnRowClick="true"
-            EditMode="DataGridEditMode.Form" Bordered="true" Elevation="15"
-            EditTrigger="DataGridEditTrigger.OnRowClick">
+            EditMode="DataGridEditMode.Form" Bordered="true" Elevation="15" Hover="true" Striped="true"
+            EditTrigger="DataGridEditTrigger.OnRowClick" Class="IsCompleted">
                 <Columns>
                     <PropertyColumn Property="x => x.Id" Title="Id" />
                     <PropertyColumn Property="x => x.Name" Title="Name" />
@@ -89,36 +90,21 @@
                     </TemplateColumn>
                     <TemplateColumn Items="todoitem">
                         <CellTemplate>
-                            @* OnClick="(() => Edit(context.Item.ID))" *@
-
-                            <a href="@($"todoitem/details/{context.Item.Id}")">
+                            @* <a href="@($"todoitem/details/{context.Item.Id}")">
                                 <i class="fa-solid fa-circle-info fa-xl"></i>
-                            </a>
+                            </a> *@
                             <a href="@($"todoitem/update/{context.Item.Id}")" class="" >
                                 <i class="fa-solid fa-pen-to-square fa-xl"></i>
                             </a>
                             <button @onclick="() => PassIdToModal(context.Item.Id)" type="button" class="" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                 <i class="fa-solid fa-trash fa-xl"></i>
                             </button>
-
-                            @* <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Primary" aria-label="delete" />
-                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" aria-label="delete" />
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="delete" /> *@
-
-                            @* I WANT TO USE THIS ONE... *@
-                            @* <a href="@($"todoitem/details/{context.Item.Id}")"><i class="fa-solid fa-circle-info fa-xl"></i></a>
-                            <a href="@($"todoitem/update/{context.Item.Id}")"><i class="fa-solid fa-pen-to-square fa-xl"></i></a> *@
-                            @* <a @onclick="() => DeleteTodoItem(context.Item.Id)" href="@($"todoitem/delete/{context.Item.Id}")"><i class="fa-solid fa-trash fa-xl"></i></a> *@
-
-                            @* <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" /> *@
-                            @* <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Details"
-                            OnClick="() => GoToDeletePage(3)" />
-                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" />
-                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" /> *@
-
                         </CellTemplate>
                     </TemplateColumn>
                 </Columns>
+                <PagerContent>
+                    <MudDataGridPager T="TodoItem" PageSizeOptions=@(new int[] {5, 10, 20}) />
+                </PagerContent>
             </MudDataGrid>
         </div>
     }
@@ -132,9 +118,6 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to delete?</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            @* <div class="modal-body">
-                ...
-            </div> *@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button @onclick="() => DeleteTodoItem(idForDelete)" type="button" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
@@ -143,28 +126,15 @@
     </div>
 </div>
 
-<!-- Edit Checkbox TOAST -->
-@* <div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <img src="..." class="rounded me-2" alt="...">
-            <strong class="me-auto">Bootstrap</strong>
-            <small>11 mins ago</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            Hello, world! This is a toast message.
-        </div>
-    </div>
-</div> *@
-
 @code {
     public List<TodoItem> ToDoListTrad = new List<TodoItem>();
     public string taskViewState = "active";
     public bool activeTasks = true;
     public string Header = "Active Tasks";
+    public string isCompleted = "";
     public bool isLoading = true;
     public int idForDelete = 0;
+
 
     // protected override async Task OnInitializedAsync()
     // {        
@@ -186,12 +156,10 @@
     {
         if(taskViewState == "completed")
         {
-            // _toDoService.ToDos = _toDoService.ToDos.Where(x => x.IsComplete == true).ToList();
             _toDoService.ToDos = await _toDoService.GetCompletedTodos();
         }
         else if (taskViewState == "active")
         {
-            // _toDoService.ToDos = _toDoService.ToDos.Where(x => x.IsComplete == false).ToList();
             _toDoService.ToDos = await _toDoService.GetActiveTodos();
         }
         else 
@@ -246,7 +214,6 @@
         idForDelete = id;
     }
 
-    // private async Task DeleteTodoItem(int id)
     private async Task DeleteTodoItem(int idForDelete)
     {
         await _toDoService.DeleteTodo(idForDelete);
@@ -267,5 +234,15 @@
         NavigationManager.NavigateTo($"todoitem/delete/{id}");
     }
 
-
+    private void SetIsCompleted() 
+    {
+        if(taskViewState == "completed")
+        {
+            isCompleted = "completed-background";
+        }
+        else
+        {
+            isCompleted = "";
+        }
+    }
 }

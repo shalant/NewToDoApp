@@ -45,22 +45,14 @@
     public bool _isLoading = false;
     private string message = string.Empty;
 
-    // [SupplyParameterFromQuery]
     [Parameter]
     public int Id { get; set; }
 
     // protected override async Task OnInitializedAsync()
     protected override async Task OnParametersSetAsync()
     {
-        // _isLoading = true;
-        // using var context = DbFactory.CreateDbContext();
-        // var todoitem = await _todoService.GetTodoItemById(Id);
         var result = await _todoService.GetTodoItemById(Id);
         _isLoading = false;
-        // if (todoitem is null)
-        // {
-        //     NavigationManager.NavigateTo("notfound");
-        // }
 
         if (!result.Success)
         {
@@ -76,6 +68,5 @@
     {
         await _todoService.DeleteTodo(Id);
         NavigationManager.NavigateTo("todolist");
-
     }
 }

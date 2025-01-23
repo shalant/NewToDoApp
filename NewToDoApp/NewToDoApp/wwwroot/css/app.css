@@ -87,6 +87,10 @@ html, body {
         color: #000;
     }
 
+.completed-background {
+    background-color: pink;
+}
+
 @keyframes slide-in {
     from {
         transform: translateX(100%);
