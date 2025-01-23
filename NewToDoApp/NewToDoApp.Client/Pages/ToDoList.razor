@@ -53,7 +53,7 @@
     @* else if (!isLoading && (_toDoService.ToDos == null || _toDoService.ToDos.Count == 0)) *@
     else if (_toDoService.ToDos == null || _toDoService.ToDos.Count == 0)
     {
-        <span>@_toDoService.Message</span>
+        <span class="message-span">@_toDoService.Message</span>
 
         @* <p>Sorry, there are no @taskViewState tasks</p>
         @if (taskViewState == "active")
