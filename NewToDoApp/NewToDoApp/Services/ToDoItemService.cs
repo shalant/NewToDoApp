@@ -80,32 +80,9 @@ namespace NewToDoApp.Services
             itemToBeUpdated.IsComplete = todoItem.IsComplete;
 
             await _context.SaveChangesAsync();
-            //var updatedTodoItem = new TodoItem
-            //{
-            //    Id = todoItem.Id,
-            //    IsComplete = todoItem.IsComplete,
-            //    Name = todoItem.Name,
-            //    Secret = todoItem.Secret
-            //};
-
-            //_context.TodoItems.Update(updatedTodoItem);
-            //await _context.SaveChangesAsync();
 
             return itemToBeUpdated;
         }
-
-        //public Task<ServiceResponse<TodoItem>> UpdateItemAsync(int id)
-        //public Task<ServiceResponse<TodoItem>> UpdateItemAsync(int id)
-        //{
-        //    //var updatedTodoItem = new TodoItem();
-        //    var request = new <TodoItem>
-        //    {
-        //            Id = updatedTodoItem.Id,
-        //            Name = updatedTodoItem.Name,
-        //            IsComplete = updatedTodoItem.IsComplete
-        //        };
-
-        //}
 
         public async Task<ServiceResponse<bool>> DeleteItemAsync(int id)
         {
@@ -125,7 +102,5 @@ namespace NewToDoApp.Services
 
             return new ServiceResponse<bool> {Data = true};
         }
-
-        
     }
 }

@@ -67,7 +67,7 @@ namespace NewToDoApp.Client.Services
             {
                 Name = item.Name,
                 IsComplete = item.IsComplete,
-                Secret = item.Secret,
+                ShortDescription = item.ShortDescription,
             };
 
             
@@ -82,7 +82,7 @@ namespace NewToDoApp.Client.Services
                 Id = item.Id,
                 Name = item.Name,
                 IsComplete = item.IsComplete,
-                Secret = item.Secret
+                ShortDescription = item.ShortDescription
             };
 
             await _http.PutAsJsonAsync($"api/todoitem/{request.Id}", request);

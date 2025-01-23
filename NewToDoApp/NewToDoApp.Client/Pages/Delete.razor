@@ -29,8 +29,8 @@
             <dd class="col-sm-10">@todoitem.IsComplete</dd>
         </dl>
         <dl class="row">
-            <dt class="col-sm-2">Secret</dt>
-            <dd class="col-sm-10">@todoitem.Secret</dd>
+            <dt class="col-sm-2">Short Description</dt>
+            <dd class="col-sm-10">@todoitem.ShortDescription</dd>
         </dl>
         <EditForm method="post" Model="todoitem" OnValidSubmit="DeleteToDoItem" FormName="delete" Enhance>
             <button type="submit" class="btn btn-danger" disabled="@(todoitem is null)">Delete</button> |

@@ -10,14 +10,6 @@ namespace NewToDoApp.Controllers
     [ApiController]
     public class TodoItemController : ControllerBase
     {
-
-        //private readonly ApplicationDbContext _context;
-
-        //public TodoItemsController(ApplicationDbContext context)
-        //{
-        //    _context = context;
-        //}
-
         private readonly IToDoItemService _toDoItemService;
 
         public TodoItemController(IToDoItemService toDoItemService)
@@ -27,8 +19,6 @@ namespace NewToDoApp.Controllers
 
         // GET: api/TodoItems
         [HttpGet]
-        //public async Task<ActionResult<IEnumerable<ToDoItemDTO>>> GetTodoItems()
-        //public async Task<ActionResult<IEnumerable<ToDoItem>>> GetTodoItems()
         public async Task<ActionResult<ServiceResponse<List<TodoItem>>>> GetTodoItems()
         {
             var result = await _toDoItemService.GetItemsAsync();
@@ -36,53 +26,24 @@ namespace NewToDoApp.Controllers
         }
 
         // GET: api/TodoItems/5
-        // <snippet_GetByID>
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<TodoItem>>> GetTodoItem(int id)
         {
             var result = await _toDoItemService.GetItemByIdAsync(id);
             return Ok(result);
         }
-        // </snippet_GetByID>
 
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        // <snippet_Update>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateToDoItem(int id, TodoItem todoItem)
         {
             var result = await _toDoItemService.UpdateItemAsync(id, todoItem);
             return Ok(result);
-            //if (id != todoDTO.Id)
-            //{
-            //    return BadRequest();
-            //}
-
-            //var todoItem = await _toDoItemService.TodoItems.FindAsync(id);
-            //if (todoItem == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //todoItem.Name = todoDTO.Name;
-            //todoItem.IsComplete = todoDTO.IsComplete;
-
-            //try
-            //{
-            //    await _toDoItemService.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException) when (!TodoItemExists(id))
-            //{
-            //    return NotFound();
-            //}
-
-            //return NoContent();
         }
-        // </snippet_Update>
 
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        // <snippet_Create>
         [HttpPost]
         public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem item)
         {
@@ -90,19 +51,13 @@ namespace NewToDoApp.Controllers
             {
                 IsComplete = item.IsComplete,
                 Name = item.Name,
-                Secret = item.Secret
+                ShortDescription = item.ShortDescription
             };
 
             _toDoItemService.AddItemAsync(todoItem);
 
             return Ok(todoItem);
-
-            //return CreatedAtAction(
-            //    nameof(GetTodoItem),
-            //    new { id = todoItem.Id },
-            //    ItemToDTO(todoItem));
         }
-        // </snippet_Create>
 
         //DELETE: api/TodoItems/5
         [HttpDelete("{id}")]

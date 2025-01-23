@@ -31,9 +31,9 @@ else
             <ValidationMessage For="() => todoitem.IsComplete" class="text-danger" />
         </div>
         <div class="mb-3">
-            <label for="secret" class="form-label">Secret:</label>
-            <InputText id="secret" @bind-Value="todoitem.Secret" class="form-control" />
-            <ValidationMessage For="() => todoitem.Secret" class="text-danger" />
+            <label for="shortDescription" class="form-label">Short Description:</label>
+            <InputText id="shortDescription" @bind-Value="todoitem.ShortDescription" class="form-control" />
+            <ValidationMessage For="() => todoitem.ShortDescription" class="text-danger" />
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
     </EditForm>

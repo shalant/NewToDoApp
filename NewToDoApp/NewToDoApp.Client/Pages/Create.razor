@@ -29,9 +29,9 @@
         <ValidationMessage For="() => ToDoItem.IsComplete" class="text-danger" />
     </div>
     <div class="mb-3">
-        <label for="secret" class="form-label">Secret:</label>
-        <InputText id="secret" @bind-Value="ToDoItem.Secret" class="form-control" />
-        <ValidationMessage For="() => ToDoItem.Secret" class="text-danger" />
+            <label for="shortDescription" class="form-label">Secret:</label>
+            <InputText id="shortDescription" @bind-Value="ToDoItem.ShortDescription" class="form-control" />
+            <ValidationMessage For="() => ToDoItem.ShortDescription" class="text-danger" />
     </div>
     <button type="submit" class="btn btn-primary">Create</button>
 </EditForm>
