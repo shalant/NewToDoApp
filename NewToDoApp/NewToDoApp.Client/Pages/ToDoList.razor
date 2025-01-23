@@ -2,11 +2,13 @@
 @using NewToDoApp.Models
 @inject NavigationManager NavigationManager
 @inject IToDoService _toDoService
+@inject ISnackbar SnackbarService
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @rendermode @(new InteractiveAutoRenderMode(prerender: false))
 
 <MudPopoverProvider />
+<MudSnackbarProvider />
 
 <div class="container">
     @if(isLoading)
@@ -73,7 +75,7 @@
                     <PropertyColumn Property="x => x.Name" Title="Name" />
                     <TemplateColumn Items="todoitem" title="Completed">
                         <CellTemplate>
-                            <MudCheckBox @bind-Value="@context.Item.IsComplete" @onclick="() => ChangeCompleteness(context.Item)"></MudCheckBox>
+                            <MudCheckBox @bind-Value="@context.Item.IsComplete" @onclick="() => ChangeCompleteness(context.Item)" id="liveToastBtn"></MudCheckBox>
                         </CellTemplate>
                     </TemplateColumn>
                     <TemplateColumn Items="todoitem">
@@ -132,6 +134,21 @@
     </div>
 </div>
 
+<!-- Edit Checkbox TOAST -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="..." class="rounded me-2" alt="...">
+            <strong class="me-auto">Bootstrap</strong>
+            <small>11 mins ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Hello, world! This is a toast message.
+        </div>
+    </div>
+</div>
+
 @code {
     public List<TodoItem> ToDoListTrad = new List<TodoItem>();
     public string taskViewState = "active";
@@ -140,18 +157,21 @@
     public bool isLoading = true;
     public int idForDelete = 0;
 
-    protected override async Task OnInitializedAsync()
-    {        
+    // protected override async Task OnInitializedAsync()
+    // {        
+    //     _toDoService.ToDosChanged += StateHasChanged;
+    //     _toDoService.ToDos = await _toDoService.GetActiveTodos();
+    //     LoadState();
+    //     isLoading = false;
+    // }
+
+    protected override async Task OnParametersSetAsync()
+    {
         _toDoService.ToDosChanged += StateHasChanged;
         _toDoService.ToDos = await _toDoService.GetActiveTodos();
         LoadState();
         isLoading = false;
     }
-
-    // protected override async Task OnParametersSetAsync()
-    // {
-    //     _toDoService.ToDosChanged += StateHasChanged;
-    // }
 
     private async void LoadState()
     {
@@ -203,6 +223,13 @@
         await _toDoService.UpdateTodoItem(itemToUpdate);
         LoadState();
         _toDoService.ToDosChanged += StateHasChanged;
+        if(taskViewState == "active"){
+            SnackbarService.Add($"Task is marked completed", Severity.Success);
+        }
+        else
+        {
+            SnackbarService.Add($"Task is marked as active", Severity.Success);
+        }
     }
 
     private async void PassIdToModal(int id)
