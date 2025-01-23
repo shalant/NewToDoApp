@@ -15,9 +15,11 @@
     <div class="@GetCssClass()">
 
 
-    <MudAppBar Elevation="1">
+    <MudAppBar Elevation="1" >
         @* <MudText Typo="Typo.h5" Class="ml-3">Application</MudText> *@
-        <img src="images/ScoutLogo-Black.jpg" alt="Logo" class="scout-logo" />
+        <a href="/">
+            <img src="images/ScoutLogo-Black.jpg" alt="Logo" class="scout-logo" />
+        </a>
         @*         <MudSwitch @bind-Value="_isDarkMode" />*@
         @* <MudSwitch @bind-Value="_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Toggle Light/Dark Mode" /> *@
         @* <MudSwitch @bind="ToggleDarkMode()"  Color="Color.Primary" Class="ma-4" T="bool" Label="Toggle Light/Dark Mode" /> *@
@@ -29,11 +31,14 @@
         {
             <i class="fa-solid fa-sun fa-2x" @onclick="() => ChangeTheme()"></i>
         } *@
-        </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Rounded.Person" Color="Color.Inherit" />
+    </MudAppBar>
+    @* <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu />
-    </MudDrawer>
-    <MudMainContent Class="mt-16 pa-4">
+    </MudDrawer> *@
+    @* <MudMainContent Class="mt-16 pa-4"> *@
+    <MudMainContent Class="mt-16">
         @Body
     </MudMainContent>
     </div>

@@ -13,6 +13,7 @@ namespace NewToDoApp.Client.Services
         }
 
         public List<TodoItem> ToDos {  get; set; } = new List<TodoItem>();
+        public string Message { get; set; } = "Loading products...";
 
         public event Action ToDosChanged;
 
@@ -31,6 +32,11 @@ namespace NewToDoApp.Client.Services
             {
                 throw ex;
             }
+
+            if (ToDos.Count == 0)
+                Message = "No products found";
+
+            ToDosChanged.Invoke();
             return ToDos;
         }
 
@@ -41,16 +47,39 @@ namespace NewToDoApp.Client.Services
             {
                 ToDos = result.Data.Where(x => x.IsComplete == false).ToList();
             }
-
+            if (ToDos.Count == 0)
+            {
+                Message = "There are zero active tasks, get to work!";
+            }
             return ToDos;
         }
         
         public async Task<List<TodoItem>> GetCompletedTodos()
         {
             var result = await _http.GetFromJsonAsync<ServiceResponse<List<TodoItem>>>("api/TodoItem");
+            
             if (result != null)
             {
                 ToDos = result.Data.Where(x => x.IsComplete == true).ToList();
+            }
+            if(ToDos.Count == 0)
+            {
+                Message = "There are zero completed tasks, get to work!";
+            }
+            return ToDos;
+        }
+        
+        public async Task<List<TodoItem>> GetAllTodos()
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<TodoItem>>>("api/TodoItem");
+            
+            if (result != null)
+            {
+                ToDos = result.Data.ToList();
+            }
+            if(ToDos.Count == 0)
+            {
+                Message = "There are zero tasks, get to work!";
             }
             return ToDos;
         }

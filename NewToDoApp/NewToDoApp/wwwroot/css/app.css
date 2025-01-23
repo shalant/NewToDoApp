@@ -5,6 +5,14 @@
 
 html, body {
     font-family: "Montserrat";
+    margin: 0;
+    padding: 0;
+}
+
+.mud-main-content {
+    padding: 0 !important;
+    margin-left: 0 !important;
+    /*margin: 0 !important;*/
 }
 
 .btn-primary {
@@ -30,6 +38,10 @@ html, body {
 
 .home-page .fa-solid {
     margin-right: 10px;
+}
+
+.home-page {
+    padding-bottom: 10%;
 }
 
 .toast-message-container {
@@ -88,7 +100,24 @@ html, body {
     }
 
 .completed-background {
-    background-color: pink;
+    color: green;
+    background-color: rgba(186, 184, 108,0.1);
+    height: 90vh;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.button-banner {
+    display: flex;
+    /*background-color: rgba(5,5,100, 0.2);*/
+    width: 100%;
+    padding: 10px 5% 1px 0;
+    align-items:flex-end;
+    justify-content: end;
+}
+
+.message-span {
+    margin-left: 50px;
 }
 
 @keyframes slide-in {

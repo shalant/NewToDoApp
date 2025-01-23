@@ -6,6 +6,7 @@ namespace NewToDoApp.Client.Services
     {
         event Action ToDosChanged;
         List<TodoItem> ToDos {  get; set; }
+        string Message { get; set; }
         Task<List<TodoItem>> GetAllToDos();
         Task<List<TodoItem>> GetActiveTodos();
         Task<List<TodoItem>> GetCompletedTodos();
