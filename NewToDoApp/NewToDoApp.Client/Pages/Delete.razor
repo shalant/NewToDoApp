@@ -48,7 +48,6 @@
     [Parameter]
     public int Id { get; set; }
 
-    // protected override async Task OnInitializedAsync()
     protected override async Task OnParametersSetAsync()
     {
         var result = await _todoService.GetTodoItemById(Id);

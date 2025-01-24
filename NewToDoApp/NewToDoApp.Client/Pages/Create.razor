@@ -46,17 +46,11 @@
     [SupplyParameterFromForm]
     private TodoItem ToDoItem { get; set; } = new();
 
-    // private async Task AddToDoItem(TodoItem item) 
     private async Task AddToDoItem() 
     {
         var newToDoItem = await _toDoService.AddToDo(ToDoItem);
         SnackbarService.Add($"Added new task", Severity.Success);
         NavigationManager.NavigateTo("todolist");
     }
-    // [SupplyParameterFromForm]
-    // private ToDoItem ToDoItem { get; set; } = new();
-
-    // private async Task AddToDoItem(){
-    //     ToDoService.AddToDo
-    // }
+    
 }

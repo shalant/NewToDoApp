@@ -7,12 +7,12 @@
 @inject IToDoService _toDoService
 @inject ISnackbar SnackbarService
 @inject ISnackbar Snackbar
-@* @inject IDialogService DialogService *@
+@inject IDialogService DialogService
 @implements IDisposable
 @rendermode @(new InteractiveAutoRenderMode(prerender: false))
 
-@* <MudPopoverProvider />
-<MudSnackbarProvider /> *@
+<MudPopoverProvider />
+<MudSnackbarProvider />
 
 <div class=" @isCompleted">
     <div class="col-md-5 col-sm-6 button-banner">
