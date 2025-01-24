@@ -1,35 +1,27 @@
 ﻿@page "/todolist"
+@page "/todolist/active"
+@page "/active"
 @using NewToDoApp.Models
+@using Microsoft.AspNetCore.Components
 @inject NavigationManager NavigationManager
 @inject IToDoService _toDoService
 @inject ISnackbar SnackbarService
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
+@implements IDisposable
 @rendermode @(new InteractiveAutoRenderMode(prerender: false))
 
 <MudPopoverProvider />
 <MudSnackbarProvider />
 
-<div class="container @isCompleted">
-    @if(isLoading)
-    {
-        <MudSkeleton SkeletonType="SkeletonType.Text" Height="40px" />
-        <MudSkeleton SkeletonType="SkeletonType.Text" Height="40px" />
-        <MudSkeleton SkeletonType="SkeletonType.Text" Height="40px" />
-        <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="800px" Height="410px" />
-    }
-    else if (_toDoService.ToDos == null || _toDoService.ToDos.Count == 0)
-    {
-        <p>Sorry, there are no @taskViewState tasks</p>
+<div class=" @isCompleted">
+    <div class="col-md-5 col-sm-6 button-banner">
         @if (taskViewState == "active")
         {
-            <div class="mb-3 d-flex">
+            <div class="mb-3 d-flex flex-end">
                 <h5 class="me-2 mt-2">View: </h5>
                 <MudButton OnClick="SetTasksToCompleted" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Completed Tasks</MudButton>
                 <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">All Tasks</MudButton>
-            </div>
-            <div class="mb-3">
-                <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
             </div>
         }
         else if (taskViewState == "completed")
@@ -39,92 +31,67 @@
                 <MudButton OnClick="SetTasksToActive" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Active Tasks</MudButton>
                 <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">All Tasks</MudButton>
             </div>
-            <div class="mb-3">
-                <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
-            </div>
         }
         else
         {
-            <div class="mb-3">
-                <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
+            <div class="mb-3 d-flex">
+                <h5 class="me-2 mt-2">View: </h5>
+                <MudButton OnClick="SetTasksToActive" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Active Tasks</MudButton>
+                <MudButton OnClick="SetTasksToCompleted" Variant="Variant.Filled" Color="Color.Dark">Completed Tasks</MudButton>
             </div>
         }
+    </div>
+    @if(isLoading)
+    {
+        <span class="message-span">@_toDoService.Message</span>
+    }
+    @* else if (!isLoading && (_toDoService.ToDos == null || _toDoService.ToDos.Count == 0)) *@
+    else if (_toDoService.ToDos == null || _toDoService.ToDos.Count == 0)
+    {
+        <span class="message-span">@_toDoService.Message</span>
     }
     else
     {
         <div class="home-page">
-            <div class="row">
+            <div class="container">
                 <div class="col-md-7 col-sm-6">
                     <h3>@Header: @_toDoService.ToDos.Count</h3>
-                    <p>@isCompleted</p>
-                    @* <p>taskViewState</p> *@
                 </div>
-                <div class="col-md-5 col-sm-6" >
-                    @if (taskViewState == "active")
+                <div class="mb-3">
+                    <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
+                    @if(taskViewState == "completed")
                     {
-                        <div class="mb-3 d-flex">
-                            <h5 class="me-2 mt-2">View: </h5>
-                            <MudButton OnClick="SetTasksToCompleted" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Completed Tasks</MudButton>
-                            <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">All Tasks</MudButton>
-                        </div>
-                    }
-                    else if (taskViewState == "completed")
-                    {
-                        <div class="mb-3 d-flex">
-                            <h5 class="me-2 mt-2">View: </h5>
-                            <MudButton OnClick="SetTasksToActive" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Active Tasks</MudButton>
-                            <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">All Tasks</MudButton>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="mb-3 d-flex">
-                            <h5 class="me-2 mt-2">View: </h5>
-                            <MudButton OnClick="SetTasksToActive" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Active Tasks</MudButton>
-                            <MudButton OnClick="SetTasksToCompleted" Variant="Variant.Filled" Color="Color.Dark">Completed Tasks</MudButton>
-                        </div>
+                        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" class="ms-2"
+                        data-bs-toggle="modal" data-bs-target="#deleteAllModal">Delete all</MudButton>
                     }
                 </div>
+                <MudDataGrid T="TodoItem" Items="_toDoService.ToDos" SelectOnRowClick="true"
+                EditMode="DataGridEditMode.Form" Bordered="true" Elevation="15" Hover="true" Striped="true"
+                EditTrigger="DataGridEditTrigger.OnRowClick" Class="IsCompleted">
+                    <Columns>
+                        <PropertyColumn Property="x => x.Id" Title="Id" />
+                        <PropertyColumn Property="x => x.Name" Title="Name" />
+                        <TemplateColumn Items="todoitem" title="Completed">
+                            <CellTemplate>
+                                <MudCheckBox @bind-Value="@context.Item.IsComplete" @onclick="() => ChangeCompleteness(context.Item)" id="liveToastBtn"></MudCheckBox>
+                            </CellTemplate>
+                        </TemplateColumn>
+                        <TemplateColumn Items="todoitem">
+                            <CellTemplate>
+                                <a href="@($"todoitem/update/{context.Item.Id}")" class="" >
+                                    <i class="fa-solid fa-pen-to-square fa-xl"></i>
+                                </a>
+                                <button @onclick="() => PassIdToModal(context.Item.Id)" type="button" class="" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <i class="fa-solid fa-trash fa-xl"></i>
+                                </button>
+                            </CellTemplate>
+                        </TemplateColumn>
+                    </Columns>
+                    <PagerContent>
+                        <MudDataGridPager T="TodoItem" PageSizeOptions=@(new int[] {5, 10, 20}) />
+                    </PagerContent>
+                </MudDataGrid>
             </div>
-
-            <div class="mb-3">
-                <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
-                @if(taskViewState == "completed")
-                {
-                    @* <MudButton @onclick="() => DeleteAll()" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" class="ms-2">Delete all</MudButton> *@
-                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" class="ms-2"
-                               data-bs-toggle="modal" data-bs-target="#deleteAllModal">Delete all</MudButton>
-                }
-            </div>
-            <MudDataGrid T="TodoItem" Items="_toDoService.ToDos" SelectOnRowClick="true"
-            EditMode="DataGridEditMode.Form" Bordered="true" Elevation="15" Hover="true" Striped="true"
-            EditTrigger="DataGridEditTrigger.OnRowClick" Class="IsCompleted">
-                <Columns>
-                    <PropertyColumn Property="x => x.Id" Title="Id" />
-                    <PropertyColumn Property="x => x.Name" Title="Name" />
-                    <TemplateColumn Items="todoitem" title="Completed">
-                        <CellTemplate>
-                            <MudCheckBox @bind-Value="@context.Item.IsComplete" @onclick="() => ChangeCompleteness(context.Item)" id="liveToastBtn"></MudCheckBox>
-                        </CellTemplate>
-                    </TemplateColumn>
-                    <TemplateColumn Items="todoitem">
-                        <CellTemplate>
-                            @* <a href="@($"todoitem/details/{context.Item.Id}")">
-                                <i class="fa-solid fa-circle-info fa-xl"></i>
-                            </a> *@
-                            <a href="@($"todoitem/update/{context.Item.Id}")" class="" >
-                                <i class="fa-solid fa-pen-to-square fa-xl"></i>
-                            </a>
-                            <button @onclick="() => PassIdToModal(context.Item.Id)" type="button" class="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                <i class="fa-solid fa-trash fa-xl"></i>
-                            </button>
-                        </CellTemplate>
-                    </TemplateColumn>
-                </Columns>
-                <PagerContent>
-                    <MudDataGridPager T="TodoItem" PageSizeOptions=@(new int[] {5, 10, 20}) />
-                </PagerContent>
-            </MudDataGrid>
         </div>
     }
 </div>
@@ -170,11 +137,13 @@
     public bool isLoading = true;
     public int idForDelete = 0;
 
+    [Parameter]
+    public string StateParam { get; set; }
 
     // protected override async Task OnInitializedAsync()
     // {        
     //     _toDoService.ToDosChanged += StateHasChanged;
-    //     _toDoService.ToDos = await _toDoService.GetActiveTodos();
+    //     // _toDoService.ToDos = await _toDoService.GetActiveTodos();
     //     LoadState();
     //     isLoading = false;
     // }
@@ -182,9 +151,14 @@
     protected override async Task OnParametersSetAsync()
     {
         _toDoService.ToDosChanged += StateHasChanged;
-        _toDoService.ToDos = await _toDoService.GetActiveTodos();
+        // _toDoService.ToDos = await _toDoService.GetActiveTodos();
         LoadState();
         isLoading = false;
+    }
+
+     public void Dispose()
+    {
+        _toDoService.ToDosChanged -= StateHasChanged;
     }
 
     private async void LoadState()
@@ -201,6 +175,7 @@
         {
             _toDoService.ToDos = await _toDoService.GetAllToDos();
         }
+        SetIsCompleted();
         StateHasChanged();
     }
 
@@ -210,6 +185,7 @@
         taskViewState = "completed";
         Header = "Completed Tasks";
         LoadState();
+        SetIsCompleted();
         _toDoService.ToDosChanged += StateHasChanged;
     }
 
@@ -283,3 +259,66 @@
         }
     }
 }
+
+
+
+
+
+                @* <div class="col-md-5 col-sm-6" >
+                    @if (taskViewState == "active")
+                    {
+                        <div class="mb-3 d-flex">
+                            <h5 class="me-2 mt-2">View: </h5>
+                            <MudButton OnClick="SetTasksToCompleted" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Completed Tasks</MudButton>
+                            <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">All Tasks</MudButton>
+                        </div>
+                    }
+                    else if (taskViewState == "completed")
+                    {
+                        <div class="mb-3 d-flex">
+                            <h5 class="me-2 mt-2">View: </h5>
+                            <MudButton OnClick="SetTasksToActive" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Active Tasks</MudButton>
+                            <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">All Tasks</MudButton>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mb-3 d-flex">
+                            <h5 class="me-2 mt-2">View: </h5>
+                            <MudButton OnClick="SetTasksToActive" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Active Tasks</MudButton>
+                            <MudButton OnClick="SetTasksToCompleted" Variant="Variant.Filled" Color="Color.Dark">Completed Tasks</MudButton>
+                        </div>
+                    }
+                </div> *@
+
+
+
+        @* <p>Sorry, there are no @taskViewState tasks</p>
+        @if (taskViewState == "active")
+        {
+            <div class="mb-3 d-flex">
+                <h5 class="me-2 mt-2">View: </h5>
+                <MudButton OnClick="SetTasksToCompleted" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Completed Tasks</MudButton>
+                <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">All Tasks</MudButton>
+            </div>
+            <div class="mb-3">
+                <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
+            </div>
+        }
+        else if (taskViewState == "completed")
+        {
+            <div class="mb-3 d-flex">
+                <h5 class="me-2 mt-2">View: </h5>
+                <MudButton OnClick="SetTasksToActive" Variant="Variant.Filled" Color="Color.Dark" class="me-3">Active Tasks</MudButton>
+                <MudButton OnClick="SetTasksToAll" Variant="Variant.Filled" Color="Color.Dark">All Tasks</MudButton>
+            </div>
+            <div class="mb-3">
+                <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
+            </div>
+        }
+        else
+        {
+            <div class="mb-3">
+                <MudButton Href="todolist/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Create</MudButton>
+            </div>
+        } *@
