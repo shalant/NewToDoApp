@@ -16,9 +16,9 @@
 
 
     <MudAppBar Elevation="1" >
-        @* <MudText Typo="Typo.h5" Class="ml-3">Application</MudText> *@
         <a href="/">
-            <img src="images/ScoutLogo-Black.jpg" alt="Logo" class="scout-logo" />
+            @* <img src="images/ScoutLogo-Black.jpg" alt="Logo" class="scout-logo" /> *@
+            <img src="images/profitco.png" alt="Logo" class="scout-logo" />
         </a>
         @*         <MudSwitch @bind-Value="_isDarkMode" />*@
         @* <MudSwitch @bind-Value="_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Toggle Light/Dark Mode" /> *@
@@ -42,23 +42,10 @@
                     <li><a class="dropdown-item" href="#">Logout</a></li>
                 </ul>
             </div>
-        @* <div class="dropdown me-3 hide-tablet">
-            <button class="btn-primary btn-secondary user-button" @onclick="ToggleUserMenu"
-                    @onfocusout="HideUserMenu" >
-            <i class="fa-solid fa-user"></i>
-            </button>
-        </div>
-        <div class="dropdown-menu dropdown-menu-left">
-                    <a href="profile" class="dropdown-item">Profile</a>
-                    <a href="orders" class="dropdown-item">Orders</a>
-                    <hr />
-                    <button class="dropdown-item" >Logout</button>
-        </div>       *@  
     </MudAppBar>
     @* <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu />
     </MudDrawer> *@
-    @* <MudMainContent Class="mt-16 pa-4"> *@
     <MudMainContent Class="mt-16">
         @Body
     </MudMainContent>

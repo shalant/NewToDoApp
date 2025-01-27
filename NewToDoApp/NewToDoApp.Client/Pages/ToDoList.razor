@@ -150,8 +150,8 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        _toDoService.ToDosChanged += StateHasChanged;
-        // _toDoService.ToDos = await _toDoService.GetActiveTodos();
+        // _toDoService.ToDosChanged += StateHasChanged;
+        _toDoService.ToDos = await _toDoService.GetActiveTodos();
         LoadState();
         isLoading = false;
     }

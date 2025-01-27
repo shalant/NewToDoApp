@@ -13,7 +13,7 @@ namespace NewToDoApp.Client.Services
         }
 
         public List<TodoItem> ToDos {  get; set; } = new List<TodoItem>();
-        public string Message { get; set; } = "Loading products...";
+        public string Message { get; set; } = "Loading todos...";
 
         public event Action ToDosChanged;
 
@@ -34,7 +34,7 @@ namespace NewToDoApp.Client.Services
             }
 
             if (ToDos.Count == 0)
-                Message = "No products found";
+                Message = "No todos found";
 
             ToDosChanged.Invoke();
             return ToDos;
