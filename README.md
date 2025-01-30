@@ -15,7 +15,7 @@ table).
 
 Additionally, I added some toasts for successful create/update via Bootstrap and dialogs to slow down the deletion process.
 
-<img src="/ScoutToDoAppSS.png" alt="Homepage" title="ScreenShot">
+Here's a walkthrough of the app! - Watch video: https://www.loom.com/share/4e2853927f79452f8026abe30cdce8bf?sid=37135894-af77-4633-a397-2fddd878c69b
 
 ### How to run
 Run this from your terminal: "git clone https://github.com/shalant/NewToDoApp.git", open the folder in file explorer, and click on the NewToDoApp.sln. It should open Visual Studio. In appsettings.json, you will need to add a correct connection string that works with your own DB. In top navigation, click tools => Nuget Package Manager => Package Manager Console. This will open a terminal where you need to run 2 commands: "add-migration Initial" and then "update-database". Then just click play...

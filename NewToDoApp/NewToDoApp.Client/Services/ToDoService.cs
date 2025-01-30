@@ -42,11 +42,20 @@ namespace NewToDoApp.Client.Services
 
         public async Task<List<TodoItem>> GetActiveTodos()
         {
-            var result = await _http.GetFromJsonAsync<ServiceResponse<List<TodoItem>>>("api/TodoItem");
-            if (result != null)
+            try
             {
-                ToDos = result.Data.Where(x => x.IsComplete == false).ToList();
+                var result = await _http.GetFromJsonAsync<ServiceResponse<List<TodoItem>>>("api/TodoItem");
+                if (result != null)
+                {
+                    ToDos = result.Data.Where(x => x.IsComplete == false).ToList();
+                }
             }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
             if (ToDos.Count == 0)
             {
                 Message = "There are zero active tasks, get to work!";
@@ -99,7 +108,6 @@ namespace NewToDoApp.Client.Services
                 ShortDescription = item.ShortDescription,
             };
 
-            
             var result = await _http.PostAsJsonAsync<TodoItem>("api/TodoItem", newToDo);
             return newToDo;
         }
